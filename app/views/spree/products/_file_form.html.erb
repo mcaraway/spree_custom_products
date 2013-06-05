@@ -1,9 +1,9 @@
 <% if @product.images.size > 0 %>
 <div style="float:left;width:50%;">
-	<div id="tin_image" class="field center-align" style="margin-top:15px;float:left;width:347px;height:300px;background-color:#ccc;border:1px solid #aaa;text-align:center;position:relative;">
+	<div id="tin_image" class="field center-align" style="margin-top:15px;float:left;width:225px;height:300px;background-color:#ccc;border:1px solid #aaa;text-align:center;position:relative;">
 		<div>
 			<% if @product.images[0].label_image_remote_url.blank? %>
-			<%= small_tea_tin_image(@product) %>
+			<%= original_image(@product) %>
 			<% else %>
 			<%= small_product_label_image(@product) %>
 			<% end %>

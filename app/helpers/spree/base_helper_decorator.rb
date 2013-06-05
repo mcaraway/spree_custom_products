@@ -117,7 +117,20 @@ Spree::BaseHelper.class_eval do
     end
   end
 
-  def prouch_image(product, options = {})
+  def original_image(product, options = {})
+    if product.images.empty?
+      options.reverse_merge! :alt => product.name 
+      options.reverse_merge! :size => "240x240"
+      image_tag "noimage/no-tin-image.png", options
+    else
+      image = product.images.first
+      options.reverse_merge! :alt => image.alt.blank? ? product.name : image.alt
+      options.reverse_merge! :size => "225x300"
+      image_tag product.images.first.attachment.url(:original), options
+    end
+  end
+  
+  def pouch_image(product, options = {})
     if product.images.empty?
       options.reverse_merge! :alt => product.name 
       options.reverse_merge! :size => "240x240"
@@ -127,6 +140,19 @@ Spree::BaseHelper.class_eval do
       options.reverse_merge! :alt => image.alt.blank? ? product.name : image.alt
       options.reverse_merge! :size => "240x240"
       image_tag product.images.first.attachment.url(:pouch), options
+    end
+  end
+  
+  def tin_image(product, options = {})
+    if product.images.empty?
+      options.reverse_merge! :alt => product.name 
+      options.reverse_merge! :size => "240x240"
+      image_tag "noimage/no-tin-image.png", options
+    else
+      image = product.images.first
+      options.reverse_merge! :alt => image.alt.blank? ? product.name : image.alt
+      options.reverse_merge! :size => "240x240"
+      image_tag product.images.first.attachment.url(:tin), options
     end
   end
 

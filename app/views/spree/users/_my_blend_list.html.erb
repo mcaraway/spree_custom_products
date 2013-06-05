@@ -3,9 +3,9 @@
 	<div style="width:100%;float:left;">
 		<% if @myblends.any? %>
 		<div style="width:100%;margin:5px 0px 15px 0px; text-align: right;">
-			<%= link_to blendit_url, :class => "button" do %>
+			<!-- <%= link_to blendit_url, :class => "button" do %>
 			<%= content_tag(:i, '', :class => 'icon-plus') + " " + t(:add_a_blend) %>
-			<% end %>
+			<% end %> -->
 		</div>
 		<ul id="products" class="inline product-listing" data-hook>
 			<% @myblends.each do |product| %>

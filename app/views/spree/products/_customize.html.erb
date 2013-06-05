@@ -1,3 +1,5 @@
 <% if !@product.is_custom? && !@product.is_customized? && @product.is_customizable? %>
-<%= link_to t(:customize), customize_product_url(@product), :class => 'button' %>
+<div style="width:100%;margin-left: -350px;">
+	<%= link_to t(:customize), customize_product_url(@product), :class => 'button' %>
+</div>
 <% end %>

@@ -20,4 +20,4 @@ en:
   not_orderable_until_final: "This product is not orderable until it is made final."
   pick_an_image: "Pick your template"
   choose_image_or_template_html: "Choose your own image<br />or<br />choose from the templates below.<br /><br />"
-  choose_image: "Choose your own image.<br />Please make sure the image is 450 x 600 in size."
+  choose_image_html: "Choose your own image.<br />Please make sure the image is 450 x 600 in size."

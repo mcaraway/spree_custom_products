@@ -8,8 +8,8 @@
 				<td style="width:260px;vertical-align: top;" rowspan="5">
 				<div class="image_fields" style="margin-top: 40px;">
 					<% if !@product.images.empty? and !@product.images[0].processing then %>
-					<%= product_image(@product, :itemprop => "image") %><br />
-					<%= prouch_image(@product, :itemprop => "image") %>
+					<%= tin_image(@product, :itemprop => "image") %><br />
+					<%= pouch_image(@product, :itemprop => "image") %>
 					<% end %>
 				</div></td>
 			</tr>

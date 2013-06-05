@@ -6,6 +6,17 @@ Spree::Product.class_eval do
     public
   end
 
+  add_search_scope :ispublic do |value|
+    logger.debug "****** :public search is #{value}"
+    value = value == nil ? true : value
+    where(:public => value)
+  end
+
+  add_search_scope :isfinal do |value|
+    logger.debug "****** :final search is #{value}"
+    value = value == nil ? true : value
+    where(:final => value)
+  end
   def is_custom?
     sku.include? custom_sku_indicator
   end
@@ -40,12 +51,14 @@ Spree::Product.class_eval do
   end
 
   def create_customized_copy(duplicate_variants = false)
-    logger.debug "********** variants = " + variants.size.to_s
+    logger.debug "********** creating customized copy for  = " + id.to_s
     p = self.dup
     p.name = name
+    p.description = ""
     p.deleted_at = nil
     p.created_at = p.updated_at = nil
     p.taxons = taxons
+    p.public = false
 
     p.product_properties = product_properties.map { |q| r = q.dup; r.created_at = r.updated_at = nil; r }
 
@@ -57,6 +70,7 @@ Spree::Product.class_eval do
     variant.images = master.images.map { |i| image_dup.call i }
     variant.price = master.price
     variant.currency = master.currency
+    variant.product_id = p.id
     p.master = variant
 
     # don't dup the actual variants, just the characterising types
@@ -76,6 +90,7 @@ Spree::Product.class_eval do
 
   def copy_variants(to)
     logger.debug "********** duplicating variants as well"
+    logger.debug "********** variants = " + variants.size.to_s
     variants.each do |var|
       logger.debug "********** duplicating variants: " + var.id.to_s
       var_dup = var.dup

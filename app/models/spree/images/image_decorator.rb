@@ -1,6 +1,6 @@
 Spree::Image.class_eval do
   before_validation :download_remote_image, :if => :label_image_url_provided?
-  validates :attachment, dimensions: { width: 450, height: 600 }
+  validates :attachment, dimensions: { width: 450, height: 600 }, :if => :is_customized?
 
   attr_accessible :label_image_remote_url
 
@@ -36,7 +36,7 @@ Spree::Image.class_eval do
         :label_template_path => "#{Rails.root.to_s}/public/images/templates/LabelTemplate.png",
         :variant_id => viewable_id,
         :label_image_remote_url => label_image_remote_url,
-        :generate_tin_image => true,
+        :generate_tin_image => false,
       },
       :small => {
         :geometry => '100x100>',
@@ -45,7 +45,7 @@ Spree::Image.class_eval do
         :label_template_path => "#{Rails.root.to_s}/public/images/templates/LabelTemplate.png",
         :variant_id => viewable_id,
         :label_image_remote_url => label_image_remote_url,
-        :generate_tin_image => true,
+        :generate_tin_image => false,
       },
       :product => {
         :geometry => '240x240>',
@@ -54,7 +54,7 @@ Spree::Image.class_eval do
         :label_template_path => "#{Rails.root.to_s}/public/images/templates/LabelTemplate.png",
         :variant_id => viewable_id,
         :label_image_remote_url => label_image_remote_url,
-        :generate_tin_image => true,
+        :generate_tin_image => false,
       },
       :large => {
         :geometry => '600x600>',
@@ -63,7 +63,7 @@ Spree::Image.class_eval do
         :label_template_path => "#{Rails.root.to_s}/public/images/templates/LabelTemplate.png",
         :variant_id => viewable_id,
         :label_image_remote_url => label_image_remote_url,
-        :generate_tin_image => true,
+        :generate_tin_image => false,
       }
     }
     variant = Spree::Variant.find_by_id(viewable_id)
@@ -75,15 +75,27 @@ Spree::Image.class_eval do
         :label_template_path => "#{Rails.root.to_s}/public/images/templates/LabelTemplate.png",
         :variant_id => viewable_id,
         :label_image_remote_url => label_image_remote_url,
+        :generate_label => false,
         :generate_tin_image => false }
         
+      default_styles[:tin] = {
+        :geometry => '240x240>',
+        :tin_path => "#{Rails.root.to_s}/public/images/templates/TeaTin.png",
+        :tin_fade_path => "#{Rails.root.to_s}/public/images/templates/TeaTinLabelFade.png",
+        :label_template_path => "#{Rails.root.to_s}/public/images/templates/LabelTemplate.png",
+        :variant_id => viewable_id,
+        :label_image_remote_url => label_image_remote_url,
+        :generate_label => false,
+        :generate_tin_image => true }
+        
       default_styles[:pouch] = {
-        :geometry => '450x600>',
+        :geometry => '240x240>',
         :tin_path => "#{Rails.root.to_s}/public/images/templates/Pouch.png",
         :tin_fade_path => "#{Rails.root.to_s}/public/images/templates/PouchFade.png",
         :label_template_path => "#{Rails.root.to_s}/public/images/templates/LabelTemplate.png",
         :variant_id => viewable_id,
         :label_image_remote_url => label_image_remote_url,
+        :generate_label => false,
         :generate_tin_image => true }
      end
      
@@ -95,6 +107,11 @@ Spree::Image.class_eval do
     supports_s3 :attachment
   end
 
+  def is_customized?
+    variant = Spree::Variant.find_by_id(viewable_id)
+    (variant and (variant.is_custom? or variant.is_customized?))
+  end
+  
   def download_image(remote_url)
     self.attachment = do_download_remote_image(remote_url)
   end

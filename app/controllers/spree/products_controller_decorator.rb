@@ -6,6 +6,14 @@ Spree::ProductsController.class_eval do
   #before_filter :verify_login?, :only => [:new, :customize]
 
   respond_to :html, :json, :js
+  def index
+    params[:ispublic] = true
+    logger.debug "****** Prototype is #{params}"
+    @searcher = Spree::Config.searcher_class.new(params)
+    @products = @searcher.retrieve_products
+
+    respond_with(@products)
+  end
   def edit
     if @product.is_custom? then
       @edit_blend = true

@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'spree_core', '~> 1.3.2'
   s.add_dependency 'paperclip'
+  s.add_dependency 'spree_auth_devise', '~> 1.0.0'
   
   s.add_development_dependency 'capybara', '~> 1.1.2'
   s.add_development_dependency 'coffee-rails'
@@ -26,5 +27,4 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec-rails',  '~> 2.9'
   s.add_development_dependency 'sass-rails'
   s.add_development_dependency 'sqlite3'
-  s.add_dependency 'spree_auth_devise', '~> 1.0.0'
 end
