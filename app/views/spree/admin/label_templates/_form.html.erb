@@ -1,0 +1,40 @@
+<div data-hook="admin_inside_label_template_form" class="field">
+  <%= f.field_container :name do %>
+    <%= f.label :name, t(:name) %> <span class="required">*</span><br />
+    <%= error_message_on :label_template, :name, :class => 'fullwidth title' %>
+    <%= text_field :label_template, :name %>
+  <% end %>
+  
+  <%= f.field_container :group do %>
+    <%= f.label :group, t(:group) %> <span class="required">*</span><br />
+    <%= error_message_on :label_template, :group, :class => 'fullwidth title' %>
+    <%= text_field :label_template, :group %>
+  <% end %>
+  
+  <%= f.field_container :image do %>
+    <%= f.label :label_image, t(:image) %> <span class="required">*</span><br />
+    <%= error_message_on :label_template, :label_image, :class => 'fullwidth title' %>
+    <% if @label_template.label_image != nil %>
+    	<%= link_to_image_med(@label_template) %><br /><br />
+    <% end %>
+    <%= file_field :label_template, :label_image %>
+  <% end %>
+</div>
+
+<%= render :partial => "spree/admin/variants/autocomplete", :formats => [:js] %>
+
+<% unless Rails.env.test? %>
+  <script>
+  $("#label_template_group").select2({
+  	maximumSelectionSize: 1,
+  	placeholder: 'select or type',
+  	tags: [
+  		<% @label_groups.keys.sort.each_with_index do |key, i| %>
+  			"<%= escape_javascript(raw(key)) %>"<%= ',' if i < (@label_groups.keys.size - 1) %>
+  		<% end %>
+  	]
+  	});
+  	
+	$('.select2-container').css({width: '18em'})
+  </script>
+<% end %>

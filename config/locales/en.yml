@@ -1,0 +1,23 @@
+# Sample localization file for English. Add more files in this directory for other locales.
+# See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+en:
+  hello: "Hello world"
+  myblends: "My Products"
+  make_my_own_blend: "Make Your Own Blend"
+  customize_your_product: "Customize your product"
+  make_public: "Allow others to see and order my blend."
+  make_private: "Keep my blend private."
+  make_orderable: "I'm finished editing make it orderable."
+  save: "Save"
+  save_blend: "Save My Blend"
+  save_draft_blend: "Save Draft Blend"
+  continue: "Continue"
+  finalize: "Finalize for Ordering"
+  custom_blend_meta_keywords: "tea, loose tea, custom blend tea"
+  custom_blend_meta_description: "A custom blended tea."
+  make_your_own_blend: "Make Your Own Blend"
+  not_orderable_until_final: "This product is not orderable until it is made final."
+  pick_an_image: "Pick your template"
+  choose_image_or_template_html: "Choose your own image<br />or<br />choose from the templates below.<br /><br />"
+  choose_image: "Choose your own image.<br />Please make sure the image is 450 x 600 in size."

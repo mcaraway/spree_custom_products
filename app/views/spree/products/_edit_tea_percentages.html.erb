@@ -1,0 +1,49 @@
+<div class="tea_cups_div" >
+	<table class="tea_builder_divider" cellpadding="10" style="min-height: 235px; width: 910px;">
+		<tbody>
+			<tr>
+				<td style="width:25%;">Your Blend:</td>
+				<td style="width:25%;"> <% flavor_count = 0 %>
+				<%= f.fields_for :product_properties do |p| %>
+				<%
+				if p.object.property_name.index("percent") == nil
+				flavor_count += 1
+				cid = "flavor" + flavor_count.to_s()
+				%>
+				<div id="<%= p.object.property_name %>editdiv">
+					<%= p.object.value == nil ? "": p.object.value %>
+				</div> 
+				<%= p.hidden_field :value, :id => cid %>
+				<%= p.hidden_field :property_name  %>
+				<%
+				end
+				%>
+				<% end %> </td>
+				<td style="width:15%;"> <% percent_count = 0 %>
+				<%= f.fields_for :product_properties do |p| %>
+				<%
+				if p.object.property_name.index("percent") != nil
+				cclass = "percentInput"
+				percent_count += 1
+				cid = "percent" + percent_count.to_s()
+				disabled = percent_count == 3 ? true : false;
+				%>
+				<div id="<%= p.object.property_name %>editdiv">
+					<%= p.object.value == nil ? "": p.object.value + "%" %>
+				</div> 
+				<%= p.hidden_field :value, :style => "width:45px", :id => cid, :readonly => disabled %>
+				<%= p.hidden_field :property_name %>
+				<%
+				end
+				%>
+				<% end %> </td>
+				<td style="width:35%;" class="tea-cup-list">
+					<%= link_to t(:edit), edit_product_url(@product, :edit_blend => "true") %>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="5"> &nbsp; </td>
+			</tr>
+		</tbody>
+	</table>
+</div>

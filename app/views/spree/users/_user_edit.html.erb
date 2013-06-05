@@ -1,0 +1,12 @@
+<div data-hook="account_summary" class="account-summary">
+	<h3><%= t(:myprofile) %></h3>
+	<dl id="user-info">
+		<dt>
+			<%= t(:email) %>
+		</dt>
+		<dd>
+			<%= @user.email %> &nbsp;&nbsp;&nbsp;
+          	<%= link_to_edit_url spree.edit_account_path %>
+		</dd>
+	</dl>
+</div>

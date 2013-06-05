@@ -1,0 +1,67 @@
+<div data-hook="my_products" style="width:100%;min-height:280px;margin-bottom: 15px;">
+	<h3><%= t(:myblends) %></h3>
+	<div style="width:100%;float:left;">
+		<% if @myblends.any? %>
+		<div style="width:100%;margin:5px 0px 15px 0px; text-align: right;">
+			<%= link_to blendit_url, :class => "button" do %>
+			<%= content_tag(:i, '', :class => 'icon-plus') + " " + t(:add_a_blend) %>
+			<% end %>
+		</div>
+		<ul id="products" class="inline product-listing" data-hook>
+			<% @myblends.each do |product| %>
+			<li id="product_<%= product.id %>" class="columns four <%= cycle("alpha", "secondary", "", "omega secondary", :name => "classes") %>"  style = "position:relative" data-hook="products_list_item" itemscope itemtype="http://schema.org/Product">
+				<div class="product-image">
+					<%= link_to product_image(product, :itemprop => "image"), product, :itemprop => 'url' %>
+				</div>
+				<%= link_to truncate(product.name, :length => 50), product, :class => 'info', :itemprop => "name", :title => "Order " + product.name %>
+				<div class="tea-menu-hidden">
+					<%= link_to_edit_url edit_product_url(product), {:no_text => true, :style => "display:inline"} %>
+					<%= link_to product, :style => "display:inline;", :title => "Order " + product.name do %>
+					<%= content_tag(:i, '', :class => 'icon-basket') %>
+					<% end %>
+				</div>
+			</li>
+			<% end %>
+			<% reset_cycle("classes") %>
+		</ul>
+		<br />
+		<%= paginate @myblends %>
+		<% else %>
+		<p style="text-align: center"><%= t(:you_have_no_blends_yet_why_not_create_one_now) %></p>
+		<div class="ui-block-b" style="text-align: center">
+			<%= link_to blendit_url, :class => "button" do %>
+			<%= content_tag(:i, '', :class => 'icon-plus') + " " + t(:make_my_own_blend) %>
+			<% end %>
+			<br />
+			Try it out, you'll love it!
+		</div>
+		<% end %>
+	</div>
+</div>
+
+<style>
+	.tea-menu-hidden {
+		display: none;
+		width: 156px;
+		height: 22px;
+		vertical-align: top;
+		text-align: right;
+	}
+	.tea-menu {
+		display: inline;
+		position: absolute;
+		top: -17px;
+		right: 4px;
+		vertical-align: middle;
+	}
+</style>
+<script type="text/javascript">
+	$("li").hover(function() {
+		div = $(this).find("div:last");
+		div.toggleClass("tea-menu", 200);
+	}, function() {
+		div = $(this).find("div:last");
+		div.toggleClass("tea-menu", 200);
+	});
+
+</script>

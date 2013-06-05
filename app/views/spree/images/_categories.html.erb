@@ -1,0 +1,107 @@
+<% content_for :head do %>
+<%= javascript_tag do -%>
+var groups = [
+	<% @label_groups.keys.sort.each_with_index do |key, i| %>
+	{
+		"name": "<%= key %>",
+		"label_templates": [
+			<% @label_groups[key].each_with_index do |label_template,j| %> {
+				"id": "<%= label_template.id %>",
+				"url": "<%= escape_javascript(raw(label_template.label_image.url(:label))) %>",
+				"name": "<%= escape_javascript(raw(label_template.name)) %>"
+			}<%= ',' if j < (@label_groups[key].size - 1) %>
+			<% end %>
+		] 
+	}<%= ',' if i < (@label_groups.keys.size - 1) %>
+	<% end %>
+]; 
+  <% end -%>
+<% end %>
+
+<nav id="categories" class="sidebar-item" data-hook>
+	<h6 class='product-section-title'><%= t(:view_by_category) %></h6>
+	<ul class="taxons-list">
+		<li onclick="javascript:showCategory('All')">All</li>
+		<% @label_groups.keys.sort.each_with_index do |key, i| %>
+		<li onclick="javascript:showCategory('<%= i %>')">
+			<%= key %>
+		</li>
+		<% end %>
+	</ul>
+</nav>
+
+<script type="text/javascript">
+	function showCategory(index) {
+		$items = $('.item');
+		$('#container').masonry('remove', $items);
+
+		$items = makeLabelDivs(index);
+
+		$('#container').append($items).masonry('reload');
+		
+		$("#container").selectable({
+		selected : function(event, ui) {
+			// set the id
+			var id = ui.selected.childNodes[3].value;
+			var input = document.getElementById("label_template_id");
+			input.value = id;
+
+			// set the url
+			//var url = ui.selected.childNodes[1].src;
+			//var input = document.getElementById("label_image_url");
+			//input.value = url;
+
+			// update the selected image
+			var image_thumbnail = document.getElementById("image_thumbnail");
+			var src = ui.selected.childNodes[1].src
+			image_thumbnail.childNodes[0].src = src.replace("/label/", "/product/");
+		}
+	}); 
+	};
+	
+	function makeLabelDivs(index) {
+		var items = [];
+		if (index == 'All') {
+			for (i = 0; i < groups.length; i++) {
+				var group = groups[i];
+				for (j = 0 ; j < group.label_templates.length; j++) {
+					items.push(makeLabelDiv(group.label_templates[j], group));
+				}
+			}
+		}
+		else {
+			var group = groups[parseInt(index)];
+			for (j = 0 ; j < group.label_templates.length; j++) {
+				items.push(makeLabelDiv(group.label_templates[j], group));
+			}
+		}
+		return items;
+	};
+	
+	function makeLabelDiv(label_template, group){
+		var div = document.createElement('div');
+		div.id = 'label_template_' + label_template.id
+		div.className = 'item ui-state-default center-align'
+		
+		var img = document.createElement('img');
+		img.src = label_template.url;
+		img.alt = label_template.name;
+		img.width = "150";
+		img.height = "200";
+		
+		var text = document.createTextNode( label_template.name );
+		
+		var input = document.createElement('input');
+		input.value = label_template.id;
+		input.id = 'label_template_' + label_template.id;
+		input.type = 'hidden';
+		input.className = 'ui-selectee';
+		
+		div.appendChild(document.createTextNode(""));
+		div.appendChild(img);
+		div.appendChild(text);
+		div.appendChild(input);
+
+		return div;
+	};
+</script>

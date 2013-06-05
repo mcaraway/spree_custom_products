@@ -1,0 +1,18 @@
+<%= render :partial => 'spree/admin/shared/configuration_menu' %>
+
+<% content_for :page_title do %>
+  <%= t(:label_templates) %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <li>
+    <%= button_link_to t(:new_label_template), spree.new_admin_label_template_url, :icon => 'icon-plus', :id => 'new_admin_label_template_link' %></p>
+  </li>
+  <li>
+    <%= button_link_to t(:refresh_labels), spree.refresh_labels_admin_label_templates_url, :method => :post, :icon => 'icon-refresh', :id => 'refresh_labels_admin_label_templates_link' %></p>
+  </li>
+<% end %>
+
+<div id='new-label-template-list' data-hook>
+  <%= render :partial => 'list' %>
+</div>

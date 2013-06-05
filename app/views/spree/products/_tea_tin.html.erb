@@ -1,0 +1,24 @@
+<div class="tea-tin">
+	<img src="/assets/TeaTin.png" width="250" height="250"/>
+</div>
+<div class="tea-tin-template">
+	<img src="/assets/store/templates/Template-white.png" width="103" height="138"/>
+</div>
+<div class="tea-tin-name" id="product_name_div">
+	<%= accurate_title %>
+</div>
+<div class="tea-tin-image" style="width:94px;height:71px;top:65px;right:28px;">
+	<%= mini_tea_tin_image(@product) %>
+</div>
+<div class="tea-tin-description" id="product_description_div">
+	<%= product_description(@product) rescue t(:product_has_no_description) %>
+</div>
+<div class="tea-tin-image-fade">
+	<img src="/assets/TeaTinLabelFade.png" width="250" height="250"/>
+</div>
+
+<% if show_teaball %>
+<div class="tea-tag">
+	<img src="/assets/tea-pile-and-tea-ball.png"/>
+</div>
+<% end %>

@@ -1,0 +1,22 @@
+<%= render :partial => 'spree/admin/shared/configuration_menu' %>
+
+<% content_for :page_title do %>
+  <%= t(:label_template) %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <li>
+    <%= button_link_to t(:back_to_label_templates_list), spree.admin_label_templates_path, :icon => 'icon-arrow-left' %>
+  </li>
+<% end %>
+
+<%= form_for [:admin, @label_template], :html => { :multipart => true } do |f| %>
+
+  <%= render :partial => 'form', :locals => { :f => f } %>
+  <fieldset class="no-border-top">
+    <br>
+    <div class="filter-actions actions" data-hook="buttons">
+      <%= button t(:create), 'icon-ok' %>
+    </div>
+  </fieldset>
+<% end %>

@@ -1,0 +1,3 @@
+<% if !@product.is_custom? && !@product.is_customized? && @product.is_customizable? %>
+<%= link_to t(:customize), customize_product_url(@product), :class => 'button' %>
+<% end %>

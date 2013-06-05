@@ -1,0 +1,8 @@
+<nav id="categories" class="sidebar-item" data-hook>
+  <h6 class='product-section-title'><%= t(:view_by_category) %></h6>
+  <ul class="taxons-list">
+  <% @label_groups.keys.sort.each do |key| %>
+  	<li><%= link_to(key, url_for(params.merge(:c => key, :only_path => false))) %></li>
+  <% end %>
+  </ul>
+</nav>

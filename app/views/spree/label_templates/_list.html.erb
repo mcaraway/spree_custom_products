@@ -1,0 +1,34 @@
+ <style>
+#label_templates .ui-selecting { background: #FECA40; }
+#label_templates .ui-selected { background: #F39814; color: white; }
+#label_templates div:hover { background: #F39814; color: white; }
+</style>
+
+<%
+ paginate @label_templates
+%>
+<h3><%= t(:pick_an_image)%></h3><br />
+<%= f.hidden_field :label_template_id, :id => 'label_template_id' %>
+<div id="label_templates" class="inline product-listing" data-hook>
+	<% @label_templates.each do |label_template| %>
+	<div id="label_template_<%= label_template.id %>" class="columns three center-align ui-state-default <%= cycle("alpha", "secondary", "", "omega secondary", :name => "classes") %>"  style = "position:relative" data-hook="label_templates_list_item" itemscope itemtype="http://schema.org/label_template">
+		<%= med_label_image(label_template) %>
+		<%= label_template.name %>
+		<%= hidden_field_tag 'label_template_'+label_template.id.to_s, label_template.id.to_s %>
+	</div>
+	<% end %>
+	<% reset_cycle("classes") %>
+</div>
+<%= paginate @label_templates %>
+
+<script type="text/javascript">
+		$("#label_templates").selectable( { selected: function (event, ui) {
+				var id = ui.selected.childNodes[3].value
+				var input = document.getElementById("label_template_id");
+				input.value = id;
+				
+				var div = document.getElementById("selected_template");
+				div.childNodes[1].src = ui.selected.childNodes[1].src;
+			}
+		});
+</script>

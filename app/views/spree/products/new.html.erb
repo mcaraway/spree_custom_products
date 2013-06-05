@@ -1,0 +1,38 @@
+<% content_for :subheader do %>
+  <h1><%= t(:make_your_own_blend) %></h1>
+<% end %>
+<% content_for :head do -%>
+  <meta name="title" content="Blend It">
+<% end -%>
+<div style="min-height: 1660px;">
+<%=form_for @product do |f| %>
+<%= render 'spree/shared/error_messages', :target => f.object %>
+<!-- >
+<div class="help-me-fields">
+	<table class="tea_builder_divider" cellpadding="10" width="910px">
+		<tbody>
+			<tr>
+				<td style="width:100%;"> <%= radio_button_tag 'helpme', 'help', true %>
+				<%= label_tag 'helpme_help', "Help me blend my teas (we'll make sure you don't mix teas that aren't compatible)." %>
+				<br />
+				<%= radio_button_tag 'helpme', 'nohelp' %>
+				<%= label_tag 'helpme_nohelp', 'I wanna go wild!' %> </td>
+			</tr>
+			<tr>
+				<td> &nbsp; </td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+-->
+<%= render :partial => 'tea_selector', :locals => { :f => f } %>
+<%= render :partial => 'tea_percentages', :locals => { :f => f } %>
+<%= render :partial => 'form', :locals => { :f => f } %>
+<% end %>
+</div>
+
+	
+<script>
+	window.onload = setup('<%= @first_flavor %>');
+</script>
+

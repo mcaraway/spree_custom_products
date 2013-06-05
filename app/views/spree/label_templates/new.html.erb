@@ -1,0 +1,20 @@
+<% content_for :subheader do %> <h1><%= t(:choose_a_product_template) %></h1>
+<% end %>
+
+<div class="columns four">
+	<div data-hook="homepage_sidebar_navigation">
+		<%= render :partial => 'categories' %>
+	</div>
+</div>
+<div class="columns eleven">
+	<div id="selected_template" class="columns eleven">
+		<%= med_label_image(get_label_template(:label_template_id)) %>
+	</div>
+	<%= form_for @product do |f| %>
+	<div class="form-buttons columns eleven" style="margin-bottom: 20px;" >
+		<%= button t(:save) %>
+		<%= t(:or) %> <%= link_to t(:cancel), edit_product_url(@product), :id => 'cancel_link' %>
+	</div>
+	<%= render :partial => 'list', :locals => { :f => f } %>
+	<% end %>
+</div>

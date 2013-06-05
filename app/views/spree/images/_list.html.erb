@@ -1,0 +1,89 @@
+<% if @label_templates.size > 0 %>
+<style>
+	#label_templates .ui-selecting {
+		background: #FECA40;
+	}
+	#label_templates .ui-selected {
+		background: #F39814;
+		color: white;
+	}
+	#label_templates div:hover {
+		background: #F39814;
+		color: white;
+	}
+	.item {
+		width: 158px;
+		margin-bottom: 15px;
+		height: 230px;
+		float: left;
+		margin: 0px 0px 10px 0px;
+	}
+</style>
+
+<h3><%= t(:pick_an_image)%></h3>
+<br />
+<div class="columns three">
+	<div data-hook="homepage_sidebar_navigation">
+		<%= render :partial => 'categories' %>
+	</div>
+</div>
+<div class="columns twelve">
+	<div id="container" class="inline product-listing" data-hook>
+		<% @label_templates.each do |label_template| %>
+		<div id="label_template_<%= label_template.id %>" class="item ui-state-default center-align <%= label_template.group %>"  data-hook="label_templates_list_item" itemscope itemtype="http://schema.org/label_template">
+			<img class="lazy" src="/assets/store/lazy-label.png" data-original="<%= label_template.label_image.url(:label) %>"  width="150" heigh="200">
+			<%= label_template.name %>
+			<%= hidden_field_tag 'label_template_'+label_template.id.to_s, label_template.id.to_s %>
+		</div>
+		<% end %>
+	</div>
+</div>
+<script type="text/javascript">
+	var $container = $('#container');
+	$container.imagesLoaded(function() {
+		$container.masonry({
+			itemSelector : '.item',
+			columnWidth : 170,
+			gutterWidth : 10,
+			isAnimated : true
+		});
+	});
+
+	function clearFileInputField(tagId) {
+		document.getElementById(tagId).innerHTML = document.getElementById(tagId).innerHTML;
+
+		$("input#image_attachment").change(function() {
+			// clear the remote url since the user choose a file
+			var remoteInput = document.getElementById("image_label_image_remote_url");
+			remoteInput.value = "";
+		
+		// update the selected image
+		var image_thumbnail = document.getElementById("image_thumbnail");
+		image_thumbnail.src = "/images/templates/default-tin.png";	
+		});
+	}
+
+
+	$("img.lazy").show().lazyload({
+		effect : "fadeIn"
+	});
+
+	$("#container").selectable({
+		selected : selectLabel
+	});
+	function selectLabel(event, ui) {
+
+		// set the url
+		var url = ui.selected.childNodes[1].src.replace("/label/", "/original/");
+		var input = document.getElementById("image_label_image_remote_url");
+		input.value = url;
+
+		// update the selected image
+		var image_thumbnail = document.getElementById("image_thumbnail");
+		var src = ui.selected.childNodes[1].src
+		image_thumbnail.src = src.replace("/label/", "/product/");
+
+		clearFileInputField("uploadFile_div");
+	};
+</script>
+<% end %>

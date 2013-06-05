@@ -1,0 +1,17 @@
+<% content_for :subheader do %> <h1><%= t(:edit_image) %></h1>
+<% end %>
+<%= render :partial => 'spree/shared/error_messages', :locals => { :target => @image } %>
+<%= form_for [@product, @image], :html => { :multipart => true } do |f| %>
+<table class="basic-table" data-hook="edit_image">
+	<tr data-hook="thumbnail">
+		<td style="width: 15%;"><%= t(:thumbnail) %>:</td>
+		<td style="width: 35%;"><%= product_image(@product, :id => "image_thumbnail") %></td>
+		<td><%= render :partial => 'form', :locals => { :f => f } %></td>
+	</tr>
+</table>
+<p class="form-buttons" data-hook="buttons">
+	<%= button t(:save) %>
+	<%= t(:or) %> <%= link_to t(:cancel), edit_product_url(@product), :id => 'cancel_link' %>
+</p>
+<% end %>
+<%= render :partial => 'list'%>
