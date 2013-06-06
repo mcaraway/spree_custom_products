@@ -23,7 +23,12 @@ Spree::Core::Engine.routes.prepend do
   end
   
   namespace :admin do
-    
+    resources :products do
+      member do
+        get :toggle_customizable
+      end
+    end
+        
     resources :label_templates do
       collection do
         post :update_positions

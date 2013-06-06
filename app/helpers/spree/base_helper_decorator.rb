@@ -59,6 +59,14 @@ Spree::BaseHelper.class_eval do
     link_to(text, url, options)
   end
 
+  def link_to_toggle(icon_name, text, url, options = {})
+    options[:class] = (options[:class].to_s + " icon_link with-tip #{icon_name}").strip
+    options[:class] += ' no-text'
+    options[:title] = text 
+    text = ''
+    link_to(text, url, options)
+  end
+  
   def icon(icon_name)
     icon_name ? content_tag(:i, '', :class => icon_name) : ''
   end

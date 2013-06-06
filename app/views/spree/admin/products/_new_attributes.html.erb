@@ -1,0 +1,18 @@
+<div class="alpha two columns">
+	<%= f.field_container :public, :class => ['checkbox'] do %>
+	<label> <%= f.check_box :public %>
+		<%= t(:public) %> </label>
+	<% end %>
+</div>
+<div class="omega two columns">
+	<%= f.field_container :final, :class => ['checkbox'] do %>
+	<label> <%= f.check_box :final %>
+		<%= t(:final) %> </label>
+	<% end %>
+</div>
+<div class="omega four columns">
+	<%= f.field_container :customizable, :class => ['checkbox'] do %>
+	<label> <%= f.check_box :customizable %>
+		<%= t(:customizable) %> </label>
+	<% end %>
+</div>

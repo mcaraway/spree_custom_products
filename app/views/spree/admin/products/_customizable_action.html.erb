@@ -1,0 +1,2 @@
+<%= link_to_toggle (product.is_customizable? ? 'icon-star' : 'icon-star-empty'), t(:customizable), spree.toggle_customizable_admin_product_url(product) unless product.deleted? %>
+&nbsp;

@@ -29,6 +29,10 @@ Spree::Product.class_eval do
     customizable
   end
 
+  def toggle_customizable
+    customizable = !customizable
+  end
+  
   def blend
     blend = ""
     product_properties.each do |property|
