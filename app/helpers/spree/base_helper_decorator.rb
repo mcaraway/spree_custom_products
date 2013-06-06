@@ -63,8 +63,7 @@ Spree::BaseHelper.class_eval do
     options[:class] = (options[:class].to_s + " icon_link with-tip #{icon_name}").strip
     options[:class] += ' no-text'
     options[:title] = text 
-    text = ''
-    link_to(text, url, options)
+    link_to('', url, options)
   end
   
   def icon(icon_name)
