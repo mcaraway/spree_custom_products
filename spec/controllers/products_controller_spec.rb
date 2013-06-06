@@ -8,7 +8,6 @@ describe Spree::ProductsController do
   end
 
   describe 'success' do
-    stub_authorization!
 
     it "should create a new product" do
       lambda do
@@ -17,8 +16,8 @@ describe Spree::ProductsController do
     end
 
     it "should show edit page" do
-        visit spree.customize_product_path(@product)
-        response.should render_template(:edit)
+      visit spree.customize_product_path(@product)
+      response.should render_template(:edit)
     end
   end
 end

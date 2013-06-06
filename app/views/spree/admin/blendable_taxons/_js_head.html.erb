@@ -1,0 +1,8 @@
+<% content_for :head do %>
+  <%= javascript_tag "var blendable_taxon_id = #{@blendable_taxon.id};
+  	var loading = '#{escape_javascript t(:loading)}';
+	var new_product = '#{escape_javascript t(:new_product)}';
+	var server_error = '#{escape_javascript t(:server_error)}';
+	var blendable_taxon_tree_error = '#{escape_javascript t(:taxonomy_tree_error)}';"
+  %>
+<% end %>

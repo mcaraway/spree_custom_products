@@ -1,0 +1,61 @@
+<%= render :partial => 'spree/admin/shared/configuration_menu' %>
+<%= render :partial => 'js_head' %>
+
+<% content_for :page_title do %>
+  <%= t(:blendable_taxonomy_edit) %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <li>
+    <%= button_link_to t(:back_to_taxonomies_list), spree.admin_blendable_taxons_path, :icon => 'icon-arrow-left' %>
+  </li>
+<% end %>
+
+<div id="ajax_error" class="errorExplanation" style="display:none;"></div>
+
+<%= form_for [:admin, @blendable_taxon] do |f| %>
+	<fieldset class="no-border-top">    
+		<%= render :partial => 'form', :locals => { :f => f } %>
+	    <div>
+	      <%= label_tag nil, t(:tree) %><br />
+	      <% @blendable_taxon.products.each do |product| %>
+			<%= product.name %> <br />
+		  <% end %>
+	    </div>
+	    <div id="progress" style="display:none;">
+	      <%= image_tag 'spinner.gif', :title => 'Spinner', :style => "vertical-align:bottom;" %> <%= t(:updating) %>..
+	    </div>
+	
+	    <div class="info"><%= t(:taxonomy_tree_instruction) %></div>
+	
+	    <br>
+	
+	    <div class="filter-actions actions">
+	      <%= button t(:update), 'icon-refresh' %>
+	      <span class="or"><%= t(:or) %></span>
+	      <%= button_link_to t(:cancel), admin_blendable_taxon_path, :icon => 'icon-remove' %>
+	    </div>	
+	</fieldset>
+<% end %>
+
+<% content_for :head do %>
+  <%= javascript_tag do -%>
+    var initial = [
+      { "attr" :
+      { "id" : "<%= @blendable_taxon.taxon.id %>", "rel" : "root" },
+      "data" : "<%= escape_javascript(raw(@blendable_taxon.taxon.name)) %>",
+      "state" : "open",
+      "children" : [
+        <% @blendable_taxon.products.each_with_index do |product,i| %>
+          {
+            "attr" :
+            { "id" : "<%= product.id %>"},
+            "data" : "<%= escape_javascript(raw(product.name)) %>",
+            "state" : "closed"
+          }<%= ',' if i < (@blendable_taxon.products.size - 1) %>
+        <% end %>
+      ]
+        }
+    ];
+  <% end -%>
+<% end %>

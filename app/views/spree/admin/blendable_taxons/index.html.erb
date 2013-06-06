@@ -1,0 +1,15 @@
+<%= render :partial => 'spree/admin/shared/configuration_menu' %>
+
+<% content_for :page_title do %>
+  <%= t(:blendable_taxonomy_edit) %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <li>
+    <%= button_link_to t(:new_taxonomy), spree.new_admin_blendable_taxon_url, :icon => 'icon-plus', :id => 'admin_new_blendable_taxon_link' %></p>
+  </li>
+<% end %>
+
+<div id='list-blendable-taxons' data-hook>
+  <%= render :partial => 'list' %>
+</div>

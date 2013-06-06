@@ -1,0 +1,35 @@
+<%= render :partial => 'spree/admin/shared/configuration_menu' %>
+<% content_for :page_title do %>
+  <%= t(:products_for) + ' ' + @blendable_taxon.taxon.name %>
+<% end %>
+<% content_for :page_actions do %>
+  <li>
+    <%= button_link_to t(:back_to_blendables_list), spree.admin_blendable_taxons_path, :icon => 'icon-arrow-left' %>
+  </li>
+<% end %>
+
+<%= form_for [:admin, @blendable_taxon], :method => :put, :html => { :multipart => true } do |f| %>
+
+<fieldset class="no-border-top">
+	<div class=" field twelve columns alpha omega products_rule_products">
+		<%= f.field_container :products do %>
+		<%= f.label :product_ids, t(:blendable_products) %>
+		<br />
+		
+        <%= f.select :product_ids, blendable_taxon_products_for(@blendable_taxon), {}, :class => "select2", :multiple => true %>
+		<% end %>
+	</div>    
+	<%= render :partial => 'spree/admin/shared/edit_resource_links' %>
+</fieldset>
+<% end %>
+
+
+<%= render :partial => "spree/admin/variants/autocomplete", :formats => [:js] %>
+
+<% unless Rails.env.test? %>
+  <script>
+  $("#blendable_taxon_product_ids").select2({maximumSelectionSize: 8});
+
+  $('.select2-container').css({width: '20em'})
+  </script>
+<% end %>
