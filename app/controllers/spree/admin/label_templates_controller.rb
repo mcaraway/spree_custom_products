@@ -3,7 +3,7 @@ module Spree
     class LabelTemplatesController < Spree::Admin::ResourceController
       before_filter :load_data
       def refresh_labels
-        Delayed::Job.enqueue Spree::ReprocessLabelTemplatesJob.new(1)
+        Delayed::Job.enqueue Spree::ReprocessLabelTemplatesJob.new()
         respond_to do |format|
           format.html { redirect_to location_after_save }
           format.js   { render :layout => false }
@@ -11,7 +11,7 @@ module Spree
       end
 
       def reprocess_images
-        Delayed::Job.enqueue Spree::ReprocessImagesJob.new(1)
+        Delayed::Job.enqueue Spree::ReprocessImagesJob.new()
 
         respond_to do |format|
           format.html { redirect_to admin_products_url }

@@ -1,8 +1,5 @@
 class Spree::LabelTemplate < ActiveRecord::Base
-
-  validates_attachment_presence :label_image
-
-  attr_accessible :group, :name, :label_image
+  #attr_accessible :group, :name, :label_image
   has_attached_file :label_image,
                     :processors => [:label_thumbnail, :thumbnail],
                     :styles => {
@@ -43,17 +40,16 @@ class Spree::LabelTemplate < ActiveRecord::Base
                     :convert_options => { :all => '-strip -auto-orient' }
   # save the w,h of the original image (from which others can be calculated)
   # we need to look at the write-queue for images which have not been saved yet
-  after_post_process :find_dimensions
 
   if Rails.env.production?
     include Spree::Core::S3Support
     supports_s3 :label_image
 
-  # Spree::LabelTemplate.attachment_definitions[:label_image][:styles] = { :label  => '600x800', :thumb => '75x100' }
-  # Spree::LabelTemplate.attachment_definitions[:label_image][:path] = ":rails_root/public/spree/label_templates/:id/:style/:basename.:extension"
-  # Spree::LabelTemplate.attachment_definitions[:label_image][:url] = "/spree/label_templates/:id/:style/:basename.:extension"
-  # Spree::LabelTemplate.attachment_definitions[:label_image][:default_url] = "/spree/label_templates/:id/:style/:basename.:extension"
-  # Spree::LabelTemplate.attachment_definitions[:label_image][:default_style] = "label"
+    # Spree::LabelTemplate.attachment_definitions[:label_image][:styles] = { :label  => '600x800', :thumb => '75x100' }
+    # Spree::LabelTemplate.attachment_definitions[:label_image][:path] = ":rails_root/public/spree/label_templates/:id/:style/:basename.:extension"
+    # Spree::LabelTemplate.attachment_definitions[:label_image][:url] = "/spree/label_templates/:id/:style/:basename.:extension"
+    # Spree::LabelTemplate.attachment_definitions[:label_image][:default_url] = "/spree/label_templates/:id/:style/:basename.:extension"
+    # Spree::LabelTemplate.attachment_definitions[:label_image][:default_style] = "label"
   end
 
   def find_dimensions
@@ -74,37 +70,37 @@ class Spree::LabelTemplate < ActiveRecord::Base
     false
     end
   end
-
-  # cancel post-processing now, and set flag...
+  
+ # cancel post-processing now, and set flag...
   before_label_image_post_process do |image|
     if image.label_image_changed?
-    image.processing = true
-    false # halts processing
+      image.processing = true
+      false # halts processing
     end
   end
-
+ 
   # ...and perform after save in background
-  after_save do |image|
+  after_save do |image| 
     if image.label_image_changed?
       Delayed::Job.enqueue Spree::ImageJob.new(image.id)
     end
   end
-
+ 
   # generate styles (downloads original first)
   def regenerate_styles!
     logger.debug("******** in regenerate")
-    self.label_image.reprocess!
-    self.processing = false
+    self.label_image.reprocess! 
+    self.processing = false   
     self.save(:validate=> false)
   end
-
+ 
   # detect if our label_image file has changed
   def label_image_changed?
     logger.debug("******** self.label_image_file_size_changed? = " + (self.label_image_file_size_changed?).to_s)
     logger.debug("******** self.label_image_file_name_changed? = " + (self.label_image_file_name_changed?).to_s)
     logger.debug("******** self.label_image_content_type_changed? = " + (self.label_image_content_type_changed?).to_s)
-    self.label_image_file_size_changed? ||
+    self.label_image_file_size_changed? || 
     self.label_image_file_name_changed? ||
     self.label_image_content_type_changed?
-  end
+  end   
 end

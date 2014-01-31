@@ -1,13 +1,17 @@
 <% if !@product.properties.empty? %>
 <% if @product.master.is_custom? %>
-<h4>Ingredients</h4>
-<%= @product.blend.gsub("/", "<br />").html_safe %>
-<br />
-<% for product_property in @product_properties %>
+<div class="row">
+	<h4>Blend</h4>
+	<strong><%= @product.blend.html_safe %></strong>
+	<br />
+	<% for product_property in @product_properties %>
 	<% if product_property.property.name.include? "sku" and !product_property.value.blank? %>
-	<%= blend_img (product_property.value) %>
+	<div class="span2 align-center">
+		<%= blend_img (product_property.value) %>
+	</div>
 	<% end %>
-<% end %>
+	<% end %>
+</div>
 <% else %>
 <h4 class="product-section-title"><%= t('properties')%></h4>
 <table id="product-properties" class="table-display" data-hook width="100%">

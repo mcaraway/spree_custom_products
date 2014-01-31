@@ -38,7 +38,7 @@ class Spree::ReprocessProductImageJob < Struct.new(:product_id)
     regexp_keys = Regexp.union(character_table.keys)
     cleaned_name = cleaned_name.gsub(regexp_keys, character_table)
 
-    url = "http://s3.amazonaws.com/uniqteas/images/products/#{cleaned_name}.jpg"
+    url = "http://s3.amazonaws.com/uniqteas/product_images/#{product.sku}.jpg"
     url
   end
 

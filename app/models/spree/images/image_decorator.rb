@@ -2,7 +2,7 @@ Spree::Image.class_eval do
   before_validation :download_remote_image, :if => :label_image_url_provided?
   validates :attachment, dimensions: { width: 450, height: 600 }, :if => :is_customized?
 
-  attr_accessible :label_image_remote_url
+  #attr_accessible :label_image_remote_url
 
   has_attached_file(
     :attachment,
@@ -102,7 +102,7 @@ Spree::Image.class_eval do
      default_styles
   end
 
-  if Rails.env.production?
+  if Rails.env.production? or Rails.env.staging?
     include Spree::Core::S3Support
     supports_s3 :attachment
   end

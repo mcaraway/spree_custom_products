@@ -1,56 +1,53 @@
 <% content_for :head do %>
-	<meta name="title" content="Edit My Blend">
-  <%= javascript_tag do -%>
-  	json={
-		"categories":
-		[
-		<% @blendables.each_with_index do |category,ccount| %>
-			{
-				"category":{
-					"name":"<%= category.name %>",
-					"backgroundcolor":"0",
-					"teas":
-						[
-						<% category.products.each_with_index do |product,prodcount| %>
-						{	
-							"tea_name":"<%= escape_javascript(raw(product.name.gsub(" Loose Leaf Tea",""))) %>",
-							"image":"",
-							"sku":"<%= escape_javascript(raw(product.master.sku)) %>",
-							"description":"<%= escape_javascript(raw(product.description.gsub("<h3>Description</h3> <p>","").gsub("</p><h3>"," ").gsub("</h3> <p>",": ").gsub("</p>","").gsub("UniqTeas.com is a great place to shop for tea and buy tea and tea accessories. ",""))) %>",
-							"ingredients":"",
-							"flavor_profile":
-							{
-								<% product.product_properties.each_with_index do |property, pcount| %>
-								"<%=property.property.name %>":"<%= property.value %>" <%= ',' if pcount < (product.properties.size - 1) %>
-								<% end %>
-							}
-						}<%= ',' if prodcount < (category.products.size - 1) %>
-						<% end %>
-						]
-				}
-			}<%= ',' if ccount < (@blendables.size - 1) %>
-		<% end %>
-		]
-	};
-  <% end -%>
+<meta name="title" content="Edit My Blend">
+<%= javascript_tag do -%>
+json={
+"categories":
+[
+<% @blendables.each_with_index do |category,ccount| %>
+{
+"category":{
+"name":"<%= category.name %>",
+"backgroundcolor":"0",
+"teas":
+[
+<% category.products.each_with_index do |product,prodcount| %>
+{
+"tea_name":"<%= escape_javascript(raw(product.name.gsub(" Loose Leaf Tea",""))) %>",
+"image":"",
+"sku":"<%= escape_javascript(raw(product.master.sku)) %>",
+"description":"<%= escape_javascript(raw(product.description.gsub("<h3>Description</h3>
+<p>
+	","").gsub("
+</p><h3>"," ").gsub("</h3>
+<p>
+	",": ").gsub("
+</p>","").gsub("UniqTeas.com is a great place to shop for tea and buy tea and tea accessories. ",""))) %>",
+"ingredients":"",
+"flavor_profile":
+{
+<% product.product_properties.each_with_index do |property, pcount| %>
+"<%= property.property.name %>":"<%= property.value %>" <%= ',' if pcount < (product.properties.size - 1) %>
 <% end %>
-<div class="tea_cups_div" id="tea_cups_div">
-	<table class="tea_builder_divider" cellpadding="10" style="border: none">
-		<tbody>
-			<tr style="border: none">
-				<td style="width:13%;">
-					<% if @edit_blend == nil || @edit_blend == false %>
-						<img src="/assets/store/icons/1.png"  width="24" height="24" >&nbsp;
-					<% end %>You can choose up to three flavors for your blend.  Click on the ones you want to add.</td>
-				<td style="width:17%;" class="tea-cup-list" id="black_tea_cups"></td>
-				<td style="width:17%;" class="tea-cup-list" id="fruit_tea_cups"></td>
-				<td style="width:17%;" class="tea-cup-list" id="herbal_tea_cups"></td>
-				<td style="width:17%;" class="tea-cup-list" id="green_tea_cups"></td>
-				<td style="width:17%;" class="tea-cup-list" id="white_tea_cups"></td>
-			</tr>
-			<tr style="border: none">
-				<td colspan="6"> &nbsp; </td>
-			</tr>
-		</tbody>
-	</table>
+}
+}<%= ',' if prodcount < (category.products.size - 1) %>
+<% end %>
+]
+}
+}<%= ',' if ccount < (@blendables.size - 1) %>
+<% end %>
+]
+};
+<% end -%>
+<% end %>
+<div class="row tea_cups_div" id="tea_cups_div">
+	<div class="span3">
+		<% if @edit_blend == nil || @edit_blend == false %> <img src="/assets/store/icons/1.png"  width="24" height="24" >&nbsp;
+		<% end %>You can choose up to three flavors for your blend.  Click on the ones you want to add.
+	</div>
+	<div class="span2 tea-cup-list" id="black_tea_cups"></div>
+	<div class="span2 tea-cup-list" id="fruit_tea_cups"></div>
+	<div class="span2 tea-cup-list" id="herbal_tea_cups"></div>
+	<div class="span2 tea-cup-list" id="green_tea_cups"></div>
+	<div class="span2 tea-cup-list" id="white_tea_cups"></div>
 </div>

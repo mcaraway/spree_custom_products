@@ -1,48 +1,64 @@
-<div class="name_fields">
-	<table style="width: 910px;border: none">
-		<tbody>
-			<% if @product.id != nil then %>
-			<tr style="border: none">
-				<td style="vertical-align: top;width:245px; text-align: right;padding-right: 10px;font-weight:bold;"><%= f.label "Artwork" %>:</td>
-				<td style="vertical-align: top;"><%= render :partial => 'file_form', :locals => { :f => f } %></td>
-				<td style="width:260px;vertical-align: top;" rowspan="5">
-				<div class="image_fields" style="margin-top: 40px;">
-					<% if !@product.images.empty? and !@product.images[0].processing then %>
-					<%= tin_image(@product, :itemprop => "image") %><br />
-					<%= pouch_image(@product, :itemprop => "image") %>
-					<% end %>
-				</div></td>
-			</tr>
-			<% end %>
-			<tr style="border: none">
-				<td style="vertical-align: top;width:245px; text-align: right;padding-right: 10px;font-weight:bold;"> <%= f.label :name %>:
-				<br />
-				<span style="font-size:13px;"><%= t(:name_lenght)%> </td></span>
-				<td  style="vertical-align: middle;width:400px;"> <%= f.text_field :name, :maxlength => 25 %> </td>
+<div class="row name_fields">
+	<div class="span15">
+		<% if @edit_blend == nil || @edit_blend == false %> <img src="/assets/store/icons/3.png" width="24" height="24" >&nbsp;
+		<% end %>Name and describe your unique blend.
+	</div>
+	<% if @product.id != nil then %>
+	<div class="span12 offset3">
+		<div class="control-group">
+			<%= f.label "Artwork", :class=> "control-label" %>
+			<div class="controls">
+				<%= render :partial => 'file_form', :locals => { :f => f } %>
+			</div>
+		</div>
+	</div>
+	<% end %>
+	<div class="span12 offset3">
+		<div class="control-group">
+			<%= f.label :name, :class=> "control-label" %>
+			<div class="controls">
+				<%= f.text_field :name, :maxlength => 25 %>
+			</div>
+		</div>
+	</div>
 
-			</tr>
-			<tr style="border: none">
-				<td style="vertical-align: top;text-align: right;padding-right: 10px;font-weight:bold;"> <%= f.label :description %>:
-				<br />
-				<span style="font-size:13px;"><%= t(:description_lenght)%> </td></span>
-				<td style="vertical-align: middle;"> <%= f.text_area :description, :maxlength => 240, :style => "width: 300px;" %> </td>
+	<div class="span12 offset3">
+		<span style="font-size:13px;"><%= t(:description_lenght)%></span>
+		<div class="control-group">
+			<%= f.label :description, :class=> "control-label" %>
+			<div class="controls">
+				<%= f.text_area :description, :maxlength => 240, :style => "width: 300px;" %>
 				<%= render :partial => 'tea_tin_script' %>
-			</tr>
-			<tr style="border: none">
-				<td style="vertical-align: top;text-align: right;padding-right: 10px;font-weight:bold;"> <%= f.label :options %>: </td>
-				<td> <%= radio_button "product", "public", "false" %> <%= t(:make_private)%>
+			</div>
+		</div>
+	</div>
+	<div class="span12 offset3">
+		<div class="control-group">
+			<%= f.label :options, :class=> "control-label" %>
+			<div class="controls">
+				<%= radio_button "product", "public", "false" %> <%= t(:make_private)%>
 				<br />
-				<%= radio_button "product", "public", "true" %> <%= t(:make_public)%> </td>
-			</tr>
-			<tr style="border: none">
-				<td style="text-align: right;vertical-align: bottom;height:40px;"></td>
-				<td style="vertical-align: bottom;"> <% if @edit_blend %>
-				<%= f.submit t(:save_blend) %>
-				<% else %>
-				<%= f.submit t(:continue) %>
-				<% end %></td>
-			</tr>
-		</tbody>
-	</table>
-</div>
+				<%= radio_button "product", "public", "true" %> <%= t(:make_public)%>
+			</div>
+		</div>
+	</div>
 
+	<div class="span6 offset5">
+		<% if @product.id == nil %>
+			<%= f.submit t(:continue) %>
+			<span style="margin-left: 10px;"><%= link_to t(:cancel), spree.myblends_path %></span>
+		<% else %>
+			<% if !@product.final %>
+				<span style="margin-left: 10px;"><%= button_tag t(:finalize), :class => "btn btn-primary", :onclick => "submit_final()" %></span> <%= f.hidden_field :final %>
+				<script type="text/javascript">
+								function submit_final() {
+					document.getElementById("product_final").value = true;
+					document.forms['edit_product_' + <%= @product.id %>].submit();
+						}
+				</script> 
+			<% end %>
+			<%= f.submit t(:save_blend) %>
+			<span style="margin-left: 10px;"><%= link_to t(:cancel), spree.myblends_path %></span>
+		<% end %> 
+	</div>
+</div>

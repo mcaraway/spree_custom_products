@@ -3,6 +3,7 @@ Spree::Core::Search::Base.class_eval do
     @properties[:taxon] = params[:taxon].blank? ? nil : Spree::Taxon.find(params[:taxon])
     @properties[:keywords] = params[:keywords]
     @properties[:search] = params[:search]
+    @properties[:iscustom] = params[:iscustom]
     @properties[:ispublic] = params[:ispublic]
     @properties[:isfinal] = params[:isfinal]
 
@@ -20,6 +21,7 @@ Spree::Core::Search::Base.class_eval do
         base_scope = base_scope.merge(Spree::Product.search({scope_name => scope_attribute}).result)
       end
     end if search
+    base_scope = base_scope.iscustom(iscustom)
     base_scope = base_scope.ispublic(ispublic)
     base_scope = base_scope.isfinal(isfinal)
     base_scope

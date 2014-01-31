@@ -12,4 +12,17 @@ Spree::User.class_eval do
     end
     myproducts
   end
+  
+  def self.create_guest_user
+    new { |u| u.guest = true; 
+      u.email = get_guest_email; 
+      u.password = (0...8).map{(65+rand(26)).chr}.join;
+      u.password_confirmation = u.password }
+  end
+  
+  private
+  
+  def self.get_guest_email
+    "guest"+ Spree::User.all.size.to_s+"@guest.com"
+  end
 end

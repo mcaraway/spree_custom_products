@@ -11,7 +11,7 @@
 <%= f.hidden_field :label_template_id, :id => 'label_template_id' %>
 <div id="label_templates" class="inline product-listing" data-hook>
 	<% @label_templates.each do |label_template| %>
-	<div id="label_template_<%= label_template.id %>" class="columns three center-align ui-state-default <%= cycle("alpha", "secondary", "", "omega secondary", :name => "classes") %>"  style = "position:relative" data-hook="label_templates_list_item" itemscope itemtype="http://schema.org/label_template">
+	<div id="label_template_<%= label_template.id %>" class="columns three align-center ui-state-default <%= cycle("alpha", "secondary", "", "omega secondary", :name => "classes") %>"  style = "position:relative" data-hook="label_templates_list_item" itemscope itemtype="http://schema.org/label_template">
 		<%= med_label_image(label_template) %>
 		<%= label_template.name %>
 		<%= hidden_field_tag 'label_template_'+label_template.id.to_s, label_template.id.to_s %>

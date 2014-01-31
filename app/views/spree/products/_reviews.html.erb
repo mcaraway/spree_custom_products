@@ -1,0 +1,69 @@
+<div id="reviews">
+	<% unless @product.reviews.approved.blank? %>
+	<% for review in @product.reviews.approved.page(params[:page]).per(Spree::Config[:preview_size]) %>
+	<%= render :partial => 'spree/shared/review', :locals => {:review => review} %>
+	<% end %>
+	<% else %>
+	<div class="review" itemprop="reviews" itemscope itemtype="http://schema.org/Review">
+		<%= t("reviews_rating.no_reviews_found") %>
+	</div>
+	<% end %>
+	<div class="pagination">
+		<div class="results">
+			<%= paginate @product.reviews.approved.page(params[:page]).per(Spree::Config[:preview_size]) %>
+		</div>
+	</div>
+	<% if try_spree_current_user and !try_spree_current_user.guest? %>
+	<% if !Spree::Config[:form_show] %>
+	<a href="#reviewModal" role="button" class="btn btn-primary" data-toggle="modal"><%= t('write_your_own_review')%></a>
+
+	<!-- Modal -->
+	<div id="reviewModal" class="modal hide fade review-signup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-header" style="border: none">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+				&times;
+			</button>
+			<h3><span><%= t("reviews_rating.write") %></span> <%= t("reviews_rating.a_review") %></h3>
+		</div>
+		<div id="reviewModelBody" class="modal-body">
+			<div id="messageDiv"></div>
+			<%= render 'spree/reviews/form', { :review => Spree::Review.new(:product => @product), :product => @product } %>
+		</div>
+	</div>
+	<% else %>
+	<%= render "spree/reviews/new", :review => Spree::Review.new(:product => @product), :product => @product %>
+	<% end %>
+	<% end %>
+</div>
+
+<script type="text/javascript">
+	$('.cancel-review').click(function(event) {
+		event.preventDefault();
+		$('.button-review').show();
+		$(".ratings").show();
+		$('#new_review').html('');
+	});
+
+	$('.button-submit').click(function(event) {
+		event.preventDefault();
+		var dat = JSON.stringify($("#new_review").serialize());
+		console.log(dat);
+		$.ajax({
+			type : 'POST',
+			url : $("#new_review").attr('action'),
+			data : dat,
+			beforeSend : function(r) {
+				$('#messageDiv').addClass('alert alert-info');
+				$('#messageDiv').html('<p style="padding: 20px">Loading <img src="/assets/ratyloader.gif"/></p>');
+			},
+			success : function(r) {
+				$('#messageDiv').removeClass('alert alert-info');
+				$('#messageDiv').html("");
+			},
+			error : function(r) {
+				$('#messageDiv').addClass('alert alert-error');
+				$('#messageDiv').html("error")
+			}
+		});
+	}); 
+</script>
