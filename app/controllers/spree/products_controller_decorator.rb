@@ -65,7 +65,7 @@ Spree::ProductsController.class_eval do
     @product.meta_keywords = Spree.t(:custom_blend_meta_keywords)
     @product.meta_description = Spree.t(:custom_blend_meta_description)
 
-    @custom_tea_taxon = Spree::Taxon.find_by_name("Custom Blends");
+    @custom_tea_taxon = Spree::Taxon.where("permalink like '%custom-blend'");
     @product.taxons = [@custom_tea_taxon] if @custom_tea_taxon
 
     if @product.save
