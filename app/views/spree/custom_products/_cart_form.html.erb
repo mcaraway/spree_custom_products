@@ -1,0 +1,40 @@
+<div class="cart-header">
+	<%= Spree.t(:add_to_cart)%>
+</div>
+<%= form_for :order, :url => populate_orders_path do |f| %>
+<div id="inside-product-cart-form" data-hook="inside_product_cart_form" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+
+	<%= render :partial => 'spree/products/variants'%>
+
+	<% if @product.price_in(current_currency) and !@product.price.nil? %>
+	<div data-hook="product_price" class="">
+
+		<% if !@product.has_variants? %>
+		<div id="product-price">
+			<h6 class="product-section-title"><%= Spree.t(:price) %></h6>
+			<div>
+				<span class="price selling" itemprop="price"><%= @product.price_in(current_currency).display_price %></span>
+			</div>
+		</div>
+		<% end %>
+		<div class="add-to-cart">
+			<% if !@product.has_variants? %>
+			<%= number_field_tag (@product.has_variants? ? :quantity : "variants[#{@product.master.id}]"),
+			1, :class => 'title', :in => 1..@product.total_on_hand, :min => 1 %>
+			<% end %>
+			<%= button_tag :class => 'large primary', :id => 'add-to-cart-button', :type => :submit do %>
+			<%= Spree.t(:add_to_cart) %>
+			<% end %>
+		</div>
+	</div>
+	<% else %>
+	<div id="product-price">
+		<br>
+		<div>
+			<span class="price selling" itemprop="price"><%= t('product_not_available_in_this_currency') %></span>
+		</div>
+	</div>
+	<% end %>
+
+</div>
+<% end %>

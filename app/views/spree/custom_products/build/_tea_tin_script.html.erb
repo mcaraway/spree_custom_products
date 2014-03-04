@@ -1,0 +1,36 @@
+
+<script type="text/javascript">
+	$("#custom_product_name").keyup(function (event) {
+		var input = document.getElementById("custom_product_name").value;
+		var nameDiv = document.getElementById("label_template_name");
+
+		nameDiv.innerHTML = input;
+		
+		nameDiv = document.getElementById("product_name_div");
+		nameDiv.innerHTML = input;
+	});
+	
+	
+	$("#custom_product_description").keyup(function (event) {
+		var input = document.getElementById("custom_product_description").value;
+		var nameDiv = document.getElementById("label_template_description");
+
+		nameDiv.innerHTML = input;
+	});
+	
+	function readURL(input) {
+		if (input.files && input.files[0]) {
+			var reader = new FileReader();
+			reader.onload = function (e) {
+			$('#target').attr('src', e.target.result);
+			$('#tea_tin_image_div').attr('src', e.target.result);
+		}
+	
+		reader.readAsDataURL(input.files[0]);
+		}
+	};
+
+	$("#custom_product_image_attachment").change(function(){
+		readURL(this);
+	});
+</script>

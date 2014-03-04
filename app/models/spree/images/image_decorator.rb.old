@@ -152,7 +152,7 @@ Spree::Image.class_eval do
     self.attachment_file_name_changed? ||
     self.attachment_content_type_changed?
   end  
-
+  
   protected
 
   def label_image_url_provided?

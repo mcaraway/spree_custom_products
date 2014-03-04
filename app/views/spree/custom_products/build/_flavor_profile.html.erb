@@ -1,0 +1,59 @@
+<div class="tea_cups_div lead" id="tea_name_percentages">
+	<div class="row">
+		<div class="span9 align-center offset2" style="padding: 20px; ">
+			<% if !@custom_product.flavor_1_sku.blank? %>
+			<%= blend_img (@custom_product.flavor_1_sku) %>
+			<% end %>
+			<% if !@custom_product.flavor_2_sku.blank? %>
+			<%= blend_img (@custom_product.flavor_2_sku) %>
+			<% end %>
+			<% if !@custom_product.flavor_3_sku.blank? %>
+			<%= blend_img (@custom_product.flavor_3_sku) %>
+			<% end %>
+		</div>
+		<div class="span4 tea-cup-list" id="flavor_profile_row">
+			<table id="flavor_profile_table" style="width:100%;margin-top: 20px;">
+				<tbody>
+					<% if @custom_product.aroma != nil && @custom_product.aroma > 0 %>
+					<%= get_star_rating('aroma', @custom_product.aroma) %>
+					<% end %>
+					<% if @custom_product.floral != nil &&  @custom_product.floral > 0 %>
+					<%= get_star_rating('floral', @custom_product.floral) %>
+					<% end %>
+					<% if @custom_product.fruity != nil &&  @custom_product.fruity > 0 %>
+					<%= get_star_rating('fruity', @custom_product.fruity) %>
+					<% end %>
+					<% if @custom_product.nutty != nil &&  @custom_product.nutty > 0 %>
+					<%= get_star_rating('nutty', @custom_product.nutty) %>
+					<% end %>
+					<% if @custom_product.spicy != nil &&  @custom_product.spicy > 0 %>
+					<%= get_star_rating('fruity', @custom_product.spicy) %>
+					<% end %>
+					<% if @custom_product.strength != nil &&  @custom_product.strength > 0 %>
+					<%= get_star_rating('strength', @custom_product.strength) %>
+					<% end %>
+					<% if @custom_product.sweetness != nil &&  @custom_product.sweetness > 0 %>
+					<%= get_star_rating('sweetness', @custom_product.sweetness) %>
+					<% end %>
+					<% if @custom_product.vegetal != nil &&  @custom_product.vegetal > 0 %>
+					<%= get_star_rating('vegetal', @custom_product.vegetal) %>
+					<% end %>
+					<% if @custom_product.woody != nil &&  @custom_product.woody > 0 %>
+					<%= get_star_rating('woody', @custom_product.woody) %>
+					<% end %>
+				</tbody>
+			</table>
+		</div>
+		
+		<div class="span2 text-center" style="clear: both;">
+			<strong><%= (editing == true ? t(:your_blend) : t(:flavor_blend)) %></strong>
+		</div>
+		<div class="span11 text-center">
+			<strong><%= @custom_product.blend.html_safe %></strong>
+			<% if editing == true %>
+			<span style="font-size: .75em; margin-bottom: 20px;"><%= link_to_with_icon('icon-edit', t(:edit), edit_custom_product_path(@custom_product)) %></span>
+			<% end %>
+		</div>
+
+	</div>
+</div>

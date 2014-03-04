@@ -1,0 +1,69 @@
+<style>
+	.label_template {
+		position: relative;
+		width: 225px;
+		height: 300px;
+		background-image: url('/assets/CustomTeaLabelBlank.png');
+		background-repeat: none;
+		border: 1px solid #000;
+	}
+	.label_template_image {
+		position: absolute;
+		width: 200px;
+		height: 153px;
+		left: 13px;
+		top: 50px;
+	}
+	.label_template_name {
+		position: absolute;
+		width: 200px;
+		height: 25px;
+		left: 13px;
+		top: 10px;
+		text-align: center;
+		font-weight: bold;
+	}
+	.label_template_description {
+		position: absolute;
+		width: 200px;
+		height: 100px;
+		left: 13px;
+		top: 210px;
+		font-size: .75em;
+		line-height: 12px;
+	}
+	.tea-menu-hidden {
+		display: none;
+		width: 20px;
+		height: 20px;
+		text-align: center;
+		vertical-align: middle;
+	}
+	.tea-menu {
+		display: inline;
+		position: absolute;
+		top: 5px;
+		right: 5px;
+		background-color: #ddd;
+		border: 1px solid #aaa;
+	}
+	.sizeUp {
+		width: 24px;
+		height: 24px;
+	}
+</style>
+<div class="label_template" id="label_image">
+	<% if @custom_product.has_image? %>
+	<%= small_product_label_image(@custom_product, :class => 'label_template_image', :id => 'target') %>
+	<% else %>
+	<%= image_tag '/assets/image_insert.png', :class => 'label_template_image', :id => 'target' %>
+	<% end %>
+	<div id="label_template_name" class="label_template_name">
+		<%= @custom_product.name.blank? ? 'Your Name Here' : @custom_product.name %>
+	</div>
+	<div id="label_template_description"  class="label_template_description">
+		<%= @custom_product.description.blank? ? 'Your Description Here' : @custom_product.description %>
+	</div>
+</div>
+<%= render :partial => "/spree/custom_products/build/tea_tin_script" %>
+

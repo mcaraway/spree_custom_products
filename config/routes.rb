@@ -1,14 +1,14 @@
-Spree::Core::Engine.routes.draw do
-  # Add your extension routes here
-end
-
 Spree::Core::Engine.add_routes do
 
-  get '/gallery', :to => redirect('/t/categories/custom-blend')
-  get '/blendit', :to => 'products#new'
+  get '/gallery', :to => 'custom_products#index'
+  get '/blendit', :to => 'custom_products/build#pick_flavors'
   get '/myblends', :to => 'users#myblends'
   
   resource :label_templates 
+  resources :custom_products do
+    resources :build, controller: 'custom_products/build'
+    resource :image
+  end
   
   resources :products do
     resources :images do

@@ -1,0 +1,65 @@
+<h1>Listing custom_products</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Flavor 1 name</th>
+      <th>Flavor 2 name</th>
+      <th>Flavor 3 name</th>
+      <th>Flavor 1 percentage</th>
+      <th>Flavor 2 percentage</th>
+      <th>Flavor 3 percentage</th>
+      <th>Flavor 1 sku</th>
+      <th>Flavor 2 sku</th>
+      <th>Flavor 3 sku</th>
+      <th>Sweetness</th>
+      <th>Fruity</th>
+      <th>Nutty</th>
+      <th>Vegetal</th>
+      <th>Woody</th>
+      <th>Aroma</th>
+      <th>Spicy</th>
+      <th>Floral</th>
+      <th>Strength</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @custom_products.each do |custom_product| %>
+      <tr>
+        <td><%= custom_product.name %></td>
+        <td><%= custom_product.description %></td>
+        <td><%= custom_product.flavor_1_name %></td>
+        <td><%= custom_product.flavor_2_name %></td>
+        <td><%= custom_product.flavor_3_name %></td>
+        <td><%= custom_product.flavor_1_percentage %></td>
+        <td><%= custom_product.flavor_2_percentage %></td>
+        <td><%= custom_product.flavor_3_percentage %></td>
+        <td><%= custom_product.flavor_1_sku %></td>
+        <td><%= custom_product.flavor_2_sku %></td>
+        <td><%= custom_product.flavor_3_sku %></td>
+        <td><%= custom_product.sweetness %></td>
+        <td><%= custom_product.fruity %></td>
+        <td><%= custom_product.nutty %></td>
+        <td><%= custom_product.vegetal %></td>
+        <td><%= custom_product.woody %></td>
+        <td><%= custom_product.aroma %></td>
+        <td><%= custom_product.spicy %></td>
+        <td><%= custom_product.floral %></td>
+        <td><%= custom_product.strength %></td>
+        <td><%= link_to 'Show', custom_product %></td>
+        <td><%= link_to 'Edit', edit_custom_product_path(custom_product) %></td>
+        <td><%= link_to 'Destroy', custom_product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Custom product', new_custom_product_path %>

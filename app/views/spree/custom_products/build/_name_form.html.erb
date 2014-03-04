@@ -1,0 +1,45 @@
+<div class="row name_fields">
+	<div class="span16">
+		Name and describe your unique blend.
+	</div>
+	<div class="span5 offset2">
+		<div class="control-group">
+			<%= f.label :name, :class=> "control-label" %>
+			<div class="controls">
+				<%= f.text_field :name, :maxlength => 25 %>
+			</div>
+		</div>
+		<span style="font-size:13px;"><%= t(:description_lenght)%></span>
+		<div class="control-group">
+			<%= f.label :description, :class=> "control-label" %>
+			<div class="controls">
+				<%= f.text_area :description, :maxlength => 240, :style => "width: 300px;" %>
+				<%= render :partial => 'tea_tin_script' %>
+			</div>
+		</div>
+		<div class="control-group">
+			<%= f.label :options, :class=> "control-label" %>
+			<div class="controls">
+				<%= radio_button "custom_product", "public", "true" %> <%= t(:make_public)%>
+				<br />
+				<%= radio_button "custom_product", "public", "false" %> <%= t(:make_private)%>
+			</div>
+		</div>
+		<!-- The fileinput-button span is used to style the file input field as button -->
+		<div class="btn btn-success" id="fakeUpload"> <i class="icon-plus icon-white"></i> <span>Add image...</span> </div>
+		<%= f.fields_for :image do |i| %>
+		<%= i.file_field :attachment, :style=>"visibility: hidden; width: 5px;" %>
+		<% end %>
+	</div>
+	<div class = "span9">
+		<div class="span4"><%= render :partial => "tea_label" %></div>
+		<div class="span4"><%= render :partial => "tea_tin" %></div>
+	</div>
+	<%= f.hidden_field :user_id %>
+</div>
+<script type="text/javascript">
+	$('#fakeUpload').click(function(e) {
+		e.preventDefault();
+		$('#custom_product_image_attachment').trigger('click');
+	}); 
+</script>

@@ -1,0 +1,20 @@
+<% @body_id = 'product-details' %>
+<%= render :partial => '/spree/custom_products/build/flavor_profile', :locals => {:editing => false} %>
+<div class="row">
+	<div class="span16" data-hook="product_left_part">
+		<div id="product-description" data-hook="product_description">
+
+			<h1 class="product-title" itemprop="name"><%= @custom_product.name %></h1>
+
+			<div itemprop="description" data-hook="description">
+				<%= custom_product_description(@custom_product) rescue Spree.t(:product_has_no_description) %>
+			</div>
+
+		</div>
+	</div>
+	<div class="span16" data-hook="product_right_part" style="padding-top: 10px;">
+		<div class="span5" style="margin: 10px 10px 10px 0px;"><%= render :partial => '/spree/custom_products/build/tea_label' %></div>
+		<div class="span5" style="margin: 10px"><%= render :partial => '/spree/custom_products/build/tea_tin' %></div>
+		<div class="span5" style="margin: 10px 0px 10px 10px;" id="cart-form"><%= render :partial => 'cart_form' %></div>
+	</div>
+</div>

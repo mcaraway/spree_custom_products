@@ -1,32 +1,35 @@
-require 'spree/core/action_callbacks'
+require 'spree/backend/action_callbacks'
 
 class Spree::ResourceController < Spree::BaseController
   helper_method :new_object_url, :edit_object_url, :object_url, :collection_url
-  before_filter :load_resource
+  before_filter :load_resource, :except => [:update_positions]
   rescue_from ActiveRecord::RecordNotFound, :with => :resource_not_found
 
   respond_to :html
-  respond_to :js, :except => [:show, :index]
   def new
     invoke_callbacks(:new_action, :before)
     respond_with(@object) do |format|
       format.html { render :layout => !request.xhr? }
-      format.js   { render :layout => false }
+      if request.xhr?
+        format.js   { render :layout => false }
+      end
     end
   end
 
   def edit
     respond_with(@object) do |format|
       format.html { render :layout => !request.xhr? }
-      format.js   { render :layout => false }
+      if request.xhr?
+        format.js   { render :layout => false }
+      end
     end
   end
 
   def update
     invoke_callbacks(:update, :before)
-    if @object.update_attributes(params[object_name])
+    if @object.update_attributes(permitted_resource_params)
       invoke_callbacks(:update, :after)
-      flash.notice = flash_message_for(@object, :successfully_updated)
+      flash[:success] = flash_message_for(@object, :successfully_updated)
       respond_with(@object) do |format|
         format.html { redirect_to location_after_save }
         format.js   { render :layout => false }
@@ -39,9 +42,10 @@ class Spree::ResourceController < Spree::BaseController
 
   def create
     invoke_callbacks(:create, :before)
+    @object.attributes = permitted_resource_params
     if @object.save
       invoke_callbacks(:create, :after)
-      flash.notice = flash_message_for(@object, :successfully_created)
+      flash[:success] = flash_message_for(@object, :successfully_created)
       respond_with(@object) do |format|
         format.html { redirect_to location_after_save }
         format.js   { render :layout => false }
@@ -52,29 +56,43 @@ class Spree::ResourceController < Spree::BaseController
     end
   end
 
+  def update_positions
+    params[:positions].each do |id, index|
+      model_class.where(:id => id).update_all(:position => index)
+    end
+
+    respond_to do |format|
+      format.js  { render :text => 'Ok' }
+    end
+  end
+
   def destroy
     invoke_callbacks(:destroy, :before)
     if @object.destroy
       invoke_callbacks(:destroy, :after)
-      flash.notice = flash_message_for(@object, :successfully_removed)
+      flash[:success] = flash_message_for(@object, :successfully_removed)
       respond_with(@object) do |format|
-        format.html { redirect_to collection_url }
+        format.html { redirect_to location_after_destroy }
         format.js   { render :partial => "spree/admin/shared/destroy" }
       end
     else
       invoke_callbacks(:destroy, :fails)
       respond_with(@object) do |format|
-        format.html { redirect_to collection_url }
+        format.html { redirect_to location_after_destroy }
       end
     end
   end
 
   protected
 
+  def action
+    params[:action].to_sym
+  end
+
   def flash_message_for(object, event_sym)
     resource_desc  = object.class.model_name.human
     resource_desc += " \"#{object.name}\"" if object.respond_to?(:name) && object.name.present?
-    I18n.t(event_sym, :resource => resource_desc)
+    Spree.t(event_sym, :resource => resource_desc)
   end
 
   def resource_not_found
@@ -128,15 +146,25 @@ class Spree::ResourceController < Spree::BaseController
   def load_resource
     if member_action?
       @object ||= load_resource_instance
+
+      # call authorize! a third time (called twice already in Admin::BaseController)
+      # this time we pass the actual instance so fine-grained abilities can control
+      # access to individual records, not just entire models.
+      authorize! action, @object
+
       instance_variable_set("@#{object_name}", @object)
     else
       @collection ||= collection
+
+      # note: we don't call authorize here as the collection method should use
+      # CanCan's accessible_by method to restrict the actual records returned
+
       instance_variable_set("@#{controller_name}", @collection)
     end
   end
 
   def load_resource_instance
-    if new_actions.include?(params[:action].to_sym)
+    if new_actions.include?(action)
       build_resource
     elsif params[:id]
       find_resource
@@ -149,7 +177,7 @@ class Spree::ResourceController < Spree::BaseController
 
   def parent
     if parent_data.present?
-      @parent ||= parent_data[:model_class].where(parent_data[:find_by] => params["#{model_name}_id"]).first
+      @parent ||= parent_data[:model_class].send("find_by_#{parent_data[:find_by]}", params["#{model_name}_id"])
       instance_variable_set("@#{model_name}", @parent)
     else
       nil
@@ -166,19 +194,23 @@ class Spree::ResourceController < Spree::BaseController
 
   def build_resource
     if parent_data.present?
-      parent.send(controller_name).build(params[object_name])
+      parent.send(controller_name).build
     else
-      model_class.new(params[object_name])
+      model_class.new
     end
   end
 
   def collection
     return parent.send(controller_name) if parent_data.present?
     if model_class.respond_to?(:accessible_by) && !current_ability.has_block?(params[:action], model_class)
-      model_class.accessible_by(current_ability)
+      model_class.accessible_by(current_ability, action)
     else
       model_class.scoped
     end
+  end
+
+  def location_after_destroy
+    collection_url
   end
 
   def location_after_save
@@ -199,9 +231,9 @@ class Spree::ResourceController < Spree::BaseController
 
   def new_object_url(options = {})
     if parent_data.present?
-      spree.new_polymorphic_url([:admin, parent, model_class], options)
+      spree.new_polymorphic_url([parent, model_class], options)
     else
-      spree.new_polymorphic_url([:admin, model_class], options)
+      spree.new_polymorphic_url([model_class], options)
     end
   end
 
@@ -224,10 +256,17 @@ class Spree::ResourceController < Spree::BaseController
 
   def collection_url(options = {})
     if parent_data.present?
-      spree.polymorphic_url([:admin, parent, model_class], options)
+      spree.polymorphic_url([parent, model_class], options)
     else
-      spree.polymorphic_url([:admin, model_class], options)
+      spree.polymorphic_url([model_class], options)
     end
+  end
+
+  # Allow all attributes to be updatable.
+  #
+  # Other controllers can, should, override it to set custom logic
+  def permitted_resource_params
+    params.require(object_name).permit!
   end
 
   def collection_actions
@@ -235,7 +274,7 @@ class Spree::ResourceController < Spree::BaseController
   end
 
   def member_action?
-    !collection_actions.include? params[:action].to_sym
+    !collection_actions.include? action
   end
 
   def new_actions

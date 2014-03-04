@@ -1,0 +1,41 @@
+<style>
+	.tea-tin {
+		position: absolute;left 0px;
+		top 0px;
+	}
+	.tea-tin-name {
+		position: absolute;
+		left: 0px;
+		top: 44px;
+		text-align: center;
+		font-weight: bold;
+		font-size: 6.5px;
+		width: 250px;
+	}
+
+	.tea-tin-image {
+		position: absolute;
+		left: 80px;
+		width: 94px;
+		height: 71px;
+		top: 65px;
+	}
+
+	.tea-tin-image-fade {
+		position: absolute;
+		left: 0px;
+		top: 2px;
+	}
+</style>
+<div class="span4" style="position: relative">
+	<div class="tea-tin">
+		<img src="/assets/store/templates/Template-white.png" width="250" height="250"/>
+	</div>
+	<div class="tea-tin-name" id="product_name_div">
+		<%= @custom_product.name %>
+	</div>
+	<%= mini_tea_tin_image(@custom_product, :id => 'tea_tin_image_div', :class => 'tea-tin-image') %>
+	<div class="tea-tin-image-fade">
+		<img src="/assets/TeaTinLabelFade.png" width="250" height="250"/>
+	</div>
+</div>

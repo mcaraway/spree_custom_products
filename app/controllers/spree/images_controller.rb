@@ -6,6 +6,27 @@ module Spree
     create.before :set_viewable
     update.before :set_viewable
     destroy.before :destroy_before
+    
+
+  # POST /uploads
+  # POST /uploads.json
+  def create
+    @image = Spree::Image.new(params[:image])
+
+    respond_to do |format|
+      if @upload.save
+        format.html {
+          render :json => [@image.to_jq_upload].to_json,
+          :content_type => 'text/html',
+          :layout => false
+        }
+        format.json { render json: {files: [@image.to_jq_upload]}, status: :created, location: @image }
+      else
+        format.html { render action: "new" }
+        format.json { render json: @image.errors, status: :unprocessable_entity }
+      end
+    end
+  end    
 
     def update_positions
       params[:positions].each do |id, index|

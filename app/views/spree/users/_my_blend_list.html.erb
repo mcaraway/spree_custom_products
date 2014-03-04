@@ -12,11 +12,11 @@
 				<% @myblends.each do |product| %>
 				<li id="product_<%= product.id %>" class="thumbnail"  style = "position:relative" data-hook="products_list_item" itemscope itemtype="http://schema.org/Product">
 					<div class="product-image">
-						<%= link_to small_image(product, :itemprop => "image"), product, :itemprop => 'url' %>
+						<%= link_to custom_product_small_image(product, :itemprop => "image"), product, :itemprop => 'url' %>
 					</div>
 					<%= link_to truncate(product.name, :length => 50), product, :class => 'info', :itemprop => "name", :title => "Order " + product.name %>
 					<div class="tea-menu-hidden">
-						<%= link_to_edit_url edit_product_url(product), {:no_text => true, :style => "display:inline"} %>
+						<%= link_to_edit_url edit_custom_product_url(product), {:no_text => true, :style => "display:inline"} %>
 						<%= link_to product, :style => "display:inline;", :title => "Order " + product.name do %>
 						<%= content_tag(:i, '', :class => 'icon-shopping-cart') %>
 						<% end %>

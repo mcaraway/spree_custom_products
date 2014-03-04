@@ -4,7 +4,7 @@ Spree::UsersController.class_eval do
   def load_myblends
     @user ||= try_spree_current_user
     logger.debug "*** user  #{@user.email}"
-    @myblends = Kaminari.paginate_array(@user.myproducts).page(params[:page]).per(Spree::Config.products_per_page) 
+    @myblends = Kaminari.paginate_array(@user.custom_products).page(params[:page]).per(Spree::Config.products_per_page) 
   end
   
   def myblends

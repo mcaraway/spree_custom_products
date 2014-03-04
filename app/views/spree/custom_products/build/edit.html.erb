@@ -1,0 +1,19 @@
+<% content_for :head do -%>
+	<meta name="title" content="Edit My Blend">
+<% end -%>
+<% content_for :subheader do %>
+  <h1 style="border-bottom: 1px solid #ccc"><%= t(:make_your_own_blend) %></h1>
+<% end %>
+<div>
+	<%=form_for @custom_product do |f| %>
+	<%= render 'spree/shared/error_messages', :target => f.object %>
+
+	<%= render :partial => 'tea_name_percentages', :locals => { :f => f } %>
+	<div id="tea_selector_div" style="display:none;">
+		<%= render :partial => 'tea_selector', :locals => { :f => f } %>
+		<%= render :partial => 'tea_percentages', :locals => { :f => f } %>	
+	</div>
+
+	<%= render :partial => 'form', :locals => { :f => f } %>
+	<% end %>
+</div>

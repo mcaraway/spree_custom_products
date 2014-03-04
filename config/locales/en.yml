@@ -2,6 +2,12 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
+  blend_is_final: "Your unique blend is ready to order."
+  your_blend: "Your Blend"
+  flavor_blend: "Tea Blend"
+  order_it: "Order It Now!"
+  name_and_describe: "Name Your Blend"
+  add_artwork: "Add Your Artwork"
   hello: "Hello world"
   myblends: "My Products"
   make_my_own_blend: "Make Your Own Blend"

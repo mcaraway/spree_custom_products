@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'spree_core', '~> 2.1.0'
   s.add_dependency 'paperclip'
+  s.add_dependency 'wicked'
   #s.add_dependency 'spree_auth_devise', '~> 2.1.0'
   
   s.add_development_dependency 'coffee-rails', '~> 4.0.0'  

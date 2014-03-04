@@ -4,6 +4,7 @@ class AbilityDecorator
     #############################
     can :manage, Spree::Image
     #############################
+    can :manage, Spree::CustomProduct
   end
 
   Spree::Ability.register_ability(AbilityDecorator)

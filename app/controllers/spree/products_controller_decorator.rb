@@ -6,7 +6,6 @@ Spree::ProductsController.class_eval do
   ssl_required :only => [:customize, :new]
 
   respond_to :html, :json, :js
-
   def index
     params[:ispublic] = true
     params[:iscustom] = params[:iscustom] == nil ? "false" : params[:iscustom]
@@ -23,12 +22,12 @@ Spree::ProductsController.class_eval do
     @product = Spree::Product.new(:price => 14.95 )
     @product.public = true
     @flavor_count = 3
-    @product.shipping_category = Spree::ShippingCategory.first 
+    @product.shipping_category = Spree::ShippingCategory.first
     logger.debug "****** Prototype is #{@prototype.properties}"
 
-    positions = Hash["flavor1name" => 0, "flavor2name" => 1, "flavor3name" => 2, 
-      "flavor1percent" => 3, "flavor2percent" => 4, "flavor3percent" => 5,
-      "flavor1sku" => 6, "flavor2sku" => 7, "flavor3sku" => 8]
+    positions = Hash["flavor1name" => 0, "flavor2name" => 1, "flavor3name" => 2,
+    "flavor1percent" => 3, "flavor2percent" => 4, "flavor3percent" => 5,
+    "flavor1sku" => 6, "flavor2sku" => 7, "flavor3sku" => 8]
     @prototype.properties.each do |property|
       logger.debug "****** setting property  #{property}"
       @product.product_properties.build( :property_name => property.name, :position => positions[property.name] )
@@ -60,13 +59,14 @@ Spree::ProductsController.class_eval do
     @product.available_on = Time.now.getutc
     @product.final = false
     @product.public = params[:product][:public]
-    @product.stock_items.build() 
-    @product.on_hand = 999999
+    @product.stock_items.build()
+    #@product.on_hand = 999999
     @product.meta_keywords = Spree.t(:custom_blend_meta_keywords)
     @product.meta_description = Spree.t(:custom_blend_meta_description)
 
-    @custom_tea_taxon = Spree::Taxon.where("permalink like '%custom-blend'");
-    @product.taxons = [@custom_tea_taxon] if @custom_tea_taxon
+    main_taxonomy = Spree::Taxonomy.where("name='Categories'"+ (current_store ? " and store_id=" + current_store.id.to_s : ""))
+    @custom_tea_taxon = Spree::Taxon.where("permalink like '%custom-blend'" + (main_taxonomy ? " and taxonomy_id=" + main_taxonomy.first.id.to_s : ""));
+    @product.taxons = [@custom_tea_taxon.first] if @custom_tea_taxon
 
     if @product.save
       @product.update_viewables
@@ -127,7 +127,7 @@ Spree::ProductsController.class_eval do
         remember_guest_product
         store_return_to(product_url(@product))
         redirect_to proc { signup_url }
-      elsif @product.final 
+      elsif @product.final
         redirect_to proc { product_url(@product) }
       else
         redirect_to proc { edit_product_url(@product) }
@@ -146,7 +146,7 @@ Spree::ProductsController.class_eval do
       flash[:warning] = "If you cancel now you will lose your blend."
     end
   end
-  
+
   def show
     return unless @product
 
@@ -163,7 +163,7 @@ Spree::ProductsController.class_eval do
 
     respond_with(@product)
   end
-  
+
   def customize
     logger.debug "************ in customize"
     if params[:id]
@@ -196,7 +196,7 @@ Spree::ProductsController.class_eval do
   private
 
   def create_custom_product
-    @product = Spree::Product.new(params[:product])
+    @product = Spree::Product.new(permit_attributes)
   end
 
   def get_custom_sku
@@ -208,7 +208,7 @@ Spree::ProductsController.class_eval do
 
     new_sku
   end
-  
+
   def load_product_for_edit
     debugger
     logger.debug "************ load_product_for_edit."
@@ -240,5 +240,9 @@ Spree::ProductsController.class_eval do
     @herbal_teas = Spree::BlendableTaxon.find_by_name("Herbal Tea")
     @green_teas = Spree::BlendableTaxon.find_by_name("Green Tea")
     @white_teas = Spree::BlendableTaxon.find_by_name("White Tea")
+  end
+
+  def permit_attributes
+    params.require(:product).permit!
   end
 end

@@ -1,0 +1,97 @@
+<% if @custom_product.has_image? %>
+<div style="float:left;width:50%;">
+	<div id="tin_image" class="field align-center" style="margin-top:15px;float:left;width:347px;height:300px;background-color:#ccc;border:1px solid #aaa;text-align:center;position:relative;">
+
+			<% if @custom_product.image.label_image_remote_url.blank? %>
+			<%= small_tea_tin_image(@custom_product.image) %>
+			<% else %>
+			<%= small_product_label_image(@custom_product.image 	) %>
+			<% end %>
+		<div class="tea-menu-hidden">
+			<%= link_to_edit_url edit_custom_product_image_url(@custom_product, @custom_product.image), {:no_text => true, :style => "display:inline"} %>
+		</div>
+	</div>
+</div>
+
+<% if @custom_product.has_image? and !@custom_product.image.label_image.processing then %>
+<div class="span3 align-center margin-top">
+	<%= custom_product_image(@custom_product, :itemprop => "image") %>
+</div>
+<% end %>
+
+<script type="text/javascript">
+	$("#tin_image").hover(function() {
+		div = $(this).find("div:last").toggleClass("tea-menu", 300);
+	}, function() {
+		$(this).find("div:last").toggleClass("tea-menu", 300);
+	}); 
+</script>
+<% else %>
+<style>
+	.bar {
+    height: 18px;
+    background: green;
+}
+</style>
+<div class="field" style="float:left;width:100%;">
+	<a href="#imageModal" role="button" data-toggle="modal"><%= t(:add_tin_image)%></a>
+	<!-- Modal -->
+	<div id="imageModal" class="modal hide fade pick-image" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-header" style="border: none">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+				×
+			</button>
+		</div>
+		<div id="imageModalBody" class="modal-body">
+			<input id="fileupload" type="file" name="files[]" data-url="server/php/" multiple>	
+			<div id="progress">
+			    <div class="bar" style="width: 0%;"></div>
+			</div>				
+		</div>
+		<div class="modal-footer">
+			<a data-dismiss="modal" href="#" style="color:#721c05;"><%= t(:cancel) %></a>
+		</div>
+	</div>	
+</div>
+
+<script>
+$(function () {
+    $('#fileupload').fileupload({
+        dataType: 'json',
+        done: function (e, data) {
+            $.each(data.result.files, function (index, file) {
+                $('<p/>').text(file.name).appendTo(document.body);
+            });
+        },
+        progressall: function (e, data) {
+        var progress = parseInt(data.loaded / data.total * 100, 10);
+        $('#progress .bar').css(
+            'width',
+            progress + '%'
+        );
+    	}
+    });
+});
+</script>
+<% end %>
+<style>
+	.tea-menu-hidden {
+		display: none;
+		width: 20px;
+		height: 20px;
+		text-align: center;
+		vertical-align: middle;
+	}
+	.tea-menu {
+		display: inline;
+		position: absolute;
+		top: 5px;
+		right: 5px;
+		background-color: #ddd;
+		border: 1px solid #aaa;
+	}
+	.sizeUp {
+		width: 24px;
+		height: 24px;
+	}
+</style>

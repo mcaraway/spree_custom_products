@@ -1,0 +1,17 @@
+<% content_for :subheader do %> <h1 style="border-bottom: 1px solid #ccc"><%= t(:make_your_own_blend) %></h1>
+<% end %>
+<% content_for :head do -%>
+<meta name="title" content="Blend It">
+<% end -%>
+<%=form_for @custom_product, :url => wizard_path, :html => {:multipart => true}, :method => :put do |f| %>
+<%= render 'spree/shared/error_messages', :target => f.object %>
+
+<%= render :partial => 'flavor_profile', :locals => { :f => f, :editing => true } %>
+<%= render :partial => 'name_form', :locals => { :f => f } %>
+
+<div style="float: right;margin-top: 20px;">
+<%= f.submit t(@custom_product.is_final? ? :update : :finalize) %>
+</div>
+
+<% end %>
+</div>

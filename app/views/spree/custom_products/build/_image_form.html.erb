@@ -1,0 +1,106 @@
+<style>
+	.label_template {
+		position: relative;
+		width: 225px;
+		height: 300px;
+		background-image: url('/assets/CustomTeaLabelBlank.png');
+		background-repeat: none;
+		border: 1px solid #000;
+	}
+	.label_template_image {
+		position: absolute;
+		width: 200px;
+		height: 153px;
+		left: 13px;
+		top: 50px;
+	}
+</style>
+    <div class="span5">
+    	<div class="label_template" id="label_image">
+    		<% if @custom_product.has_image? %>
+    			<%= small_product_label_image(@custom_product, :class => 'label_template_image', :id => 'target') %>
+    		 <% else %>
+    		 <%= image_tag '/assets/image_insert.png', :class => 'label_template_image', :id => 'target' %>
+    		 <% end %>
+    	</div>
+    </div>
+    <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+    <div class="row fileupload-buttonbar">
+      <div class="span7">
+        <!-- The fileinput-button span is used to style the file input field as button -->
+        <span class="btn btn-success fileinput-button">
+          <i class="icon-plus icon-white"></i>
+          <span>Add files...</span>
+          <%= f.fields_for :image do |i| %>
+          <%= i.file_field :attachment %>
+          <% end %>
+        </span>
+        <button type="button" class="btn btn-primary start" onclick="javascript:upload()">
+          <i class="icon-upload icon-white"></i>
+          <span>Start upload</span>
+        </button>
+      </div>
+    </div>
+
+<% if @custom_product.has_image? and !@custom_product.image.processing then %>
+<div class="span3 align-center margin-top">
+	<%= custom_product_image(@custom_product, :itemprop => "image") %>
+</div>
+<% end %>
+
+<script type="text/javascript">
+	$("#label_image").hover(function() {
+		div = $(this).find("div:last").toggleClass("tea-menu", 300);
+	}, function() {
+		$(this).find("div:last").toggleClass("tea-menu", 300);
+	}); 
+	
+  function upload() {
+  	var form = document.getElementById('edit_custom_product_<%=@custom_product.id%>');
+  	var input = document.createElement("input");
+    input.type = "text";
+    input.name = "upload";
+    input.id = "upload";
+    input.value = "true";
+    form.appendChild(input);
+  	
+  	form.submit();
+  };
+
+	function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();            
+            reader.onload = function (e) {
+                $('#target').attr('src', e.target.result);
+            }
+            
+            reader.readAsDataURL(input.files[0]);
+        }
+   };
+    
+    $("#custom_product_image_attachment").change(function(){
+        readURL(this);
+    });
+    		
+</script>
+<style>
+	.tea-menu-hidden {
+		display: none;
+		width: 20px;
+		height: 20px;
+		text-align: center;
+		vertical-align: middle;
+	}
+	.tea-menu {
+		display: inline;
+		position: absolute;
+		top: 5px;
+		right: 5px;
+		background-color: #ddd;
+		border: 1px solid #aaa;
+	}
+	.sizeUp {
+		width: 24px;
+		height: 24px;
+	}
+</style>
