@@ -1,3 +1,3 @@
 Spree::LineItem.class_eval do
-  has_one :custom_product
+  belongs_to :custom_product
 end

@@ -1,0 +1,6 @@
+<% if params[:keywords] %>
+	<%= form_tag spree.custom_products_path, :method => :get, :id => 'search_form' do %>
+	  <%= hidden_field_tag :keywords, params[:keywords] %>
+		<%= link_to Spree.t(:search_custom_products_also) + params[:keywords], "#", :onclick=>"$('#search_form').submit()" %>
+	<% end %>
+<% end %>

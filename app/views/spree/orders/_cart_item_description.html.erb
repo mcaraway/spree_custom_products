@@ -1,0 +1,12 @@
+<td class="cart-item-description" data-hook="cart_item_description">
+	<h4> 
+		<% if line_item.custom_product == nil %>
+			<%= link_to line_item.name, product_path(variant.product) %>
+		<% else %>
+			<%= link_to line_item.custom_product.name, line_item.custom_product %>
+		<% end %>
+	</h4> 
+	<%= variant.options_text %>
+<% if @order.insufficient_stock_lines.include? line_item %> <span class="out-of-stock"> <%= Spree.t(:out_of_stock) %>&nbsp;&nbsp;
+	<br />
+</span> <% end %> <span class="line-item-description" data-hook="line_item_description"> <%= line_item_description_text((line_item.custom_product == nil ?  line_item.description : line_item.custom_product.description))%> </span></td>

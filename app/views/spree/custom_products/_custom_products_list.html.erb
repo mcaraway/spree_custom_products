@@ -1,0 +1,66 @@
+<%
+  paginated_products ||= products
+%>
+<% if products.empty? %>
+<%= Spree.t(:no_products_found) %>
+<% elsif params.key?(:keywords) %>
+<h6 class="search-results-title"><%= Spree.t(:search_results, :keywords => h(params[:keywords])) %></h6>
+<% end %>
+
+<% if products.any? %>
+<ul id="products" class="thumbnails" data-hook>
+	<% products.each do |product| %>
+	<li id="product_<%= product.id %>" class="span3" data-hook="products_list_item" itemscope itemtype="http://schema.org/Product">
+		<%= link_to(product) do %>
+		<div class="thumbnail product-image">
+			<div style="width: 100%; height: 100px; text-align: center">
+			<%= custom_product_small_image(product, :itemprop => "image") %>
+			</div>
+			<h5><%= truncate(product.name, :length => 32) %></h5>
+			<div class="description" style="min-height: 65px;max-height:65px;"><%= product.blend %></div>
+			<div class="description" style="min-height: 108px;max-height:108px;"><%= truncate(product.description, :length => 100).html_safe %></div>
+			<div style="margin-top: 20px;min-height: 135px;max-height:135px;">
+			<table id="flavor_profile_table" style="width:100%;">
+				<tbody>
+					<% if product.aroma != nil && product.aroma > 0 %>
+					<%= get_star_rating('aroma', product.aroma, "75px", "11px") %>
+					<% end %>
+					<% if product.floral != nil &&  product.floral > 0 %>
+					<%= get_star_rating('floral', product.floral, "75px", "11px") %>
+					<% end %>
+					<% if product.fruity != nil &&  product.fruity > 0 %>
+					<%= get_star_rating('fruity', product.fruity, "75px", "11px") %>
+					<% end %>
+					<% if product.nutty != nil &&  product.nutty > 0 %>
+					<%= get_star_rating('nutty', product.nutty, "75px", "11px") %>
+					<% end %>
+					<% if product.spicy != nil &&  product.spicy > 0 %>
+					<%= get_star_rating('spicy', product.spicy, "75px", "11px") %>
+					<% end %>
+					<% if product.strength != nil &&  product.strength > 0 %>
+					<%= get_star_rating('strength', product.strength, "75px", "11px") %>
+					<% end %>
+					<% if product.sweetness != nil &&  product.sweetness > 0 %>
+					<%= get_star_rating('sweetness', product.sweetness, "75px", "11px") %>
+					<% end %>
+					<% if product.vegetal != nil &&  product.vegetal > 0 %>
+					<%= get_star_rating('vegetal', product.vegetal, "75px", "11px") %>
+					<% end %>
+					<% if product.woody != nil &&  product.woody > 0 %>
+					<%= get_star_rating('woody', product.woody, "75px", "11px") %>
+					<% end %>
+				</tbody>
+			</table>
+			</div>
+		</div>
+		<% end %>
+	</li>
+	<% end %>
+	<% reset_cycle("classes") %>
+</ul>
+<% end %>
+
+<% if paginated_products.respond_to?(:num_pages) %>
+<%= paginate paginated_products %>
+<% end %>
+

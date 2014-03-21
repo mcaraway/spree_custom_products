@@ -34,7 +34,11 @@
 	<div class="tea-tin-name" id="product_name_div">
 		<%= @custom_product.name %>
 	</div>
-	<%= mini_tea_tin_image(@custom_product, :id => 'tea_tin_image_div', :class => 'tea-tin-image') %>
+	<% if @custom_product.has_image? %>
+	<%= mini_tea_tin_image(@custom_product, :class => 'tea-tin-image', :id => 'tea_tin_image_div') %>
+	<% else %>
+	<%= image_tag '/assets/image_insert.png', :class => 'tea-tin-image', :id => 'tea_tin_image_div' %>
+	<% end %>
 	<div class="tea-tin-image-fade">
 		<img src="/assets/TeaTinLabelFade.png" width="250" height="250"/>
 	</div>

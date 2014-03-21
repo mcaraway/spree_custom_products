@@ -1,7 +1,7 @@
 Spree::Core::Engine.add_routes do
 
   get '/gallery', :to => 'custom_products#index'
-  get '/blendit', :to => 'custom_products/build#pick_flavors'
+  get '/blendit', :to => 'custom_products#new'
   get '/myblends', :to => 'users#myblends'
   
   resource :label_templates 

@@ -1,0 +1,11 @@
+<td class="cart-item-image" data-hook="cart_item_image">
+	<% if line_item.custom_product == nil %>
+		<% if variant.images.length == 0 %>
+			<%= link_to small_image(variant.product), variant.product %>
+		<% else %>
+			<%= link_to image_tag(variant.images.first.attachment.url(:small)), variant.product %>
+		<% end %>
+	<% else %>
+		<%= link_to image_tag(line_item.custom_product.image.attachment.url(:small)), line_item.custom_product %>
+	<% end %>
+</td>

@@ -7,23 +7,26 @@ class Spree::CustomProducts::BuildController < Spree::StoreController
   before_filter :check_custom_product
   def update
     puts "****** in update"
+    params[:custom_product][:step] = step.to_s
     case step
+    when :pick_flavors
+      load_blendables
     when :add_name
-      image_params = params[:custom_product]
-      if image_params[:image] != nil
-        @image.assign_attributes(image_params.require(:image).permit!)
+      custom_product_params = params[:custom_product]
+      if custom_product_params[:image] != nil
+        @image = !@custom_product.has_image? ? @custom_product.build_image : Spree::Image.find(@custom_product.image.id)
+        @image.assign_attributes(custom_product_params.require(:image).permit!)
         @image.save!
         params[:custom_product].delete :image
       end
-      params[:final] = true
+      params[:custom_product][:final] = true
     end
     @custom_product.update_attributes(params.require(:custom_product).permit!)
 
-    if @custom_product.permalink.to_i > 0 && step == :add_name
+    if @custom_product.permalink.to_i > 0 && step == :finalize
       @custom_product.save_permalink(@custom_product.name.to_s.to_url)
       process_resource!(@custom_product)
-      flash[:success] = t(:blend_is_final)
-      redirect_to wizard_path(:finalize, :custom_product_id => @custom_product.permalink)
+      redirect_to_finish_wizard
     else
       render_wizard @custom_product
     end
@@ -59,7 +62,7 @@ class Spree::CustomProducts::BuildController < Spree::StoreController
 
   def check_custom_product
     @custom_product = Spree::CustomProduct.find_by_permalink!(params[:custom_product_id])
-    @image = @custom_product.image == nil ? @custom_product.build_image : Spree::Image.find(@custom_product.image.id)
+    #@image = @custom_product.image == nil ? @custom_product.build_image : Spree::Image.find(@custom_product.image.id)
   end
 
   def create_starter_product

@@ -1,4 +1,6 @@
 Spree::ProductsController.class_eval do
+  include Spree::CustomProductsHelper
+  
   before_filter :load_product_for_edit, :only => [:edit, :update, :customize]
   before_filter :create_custom_product, :only => :create
   before_filter :load_blendables, :only => [:new, :edit]
@@ -7,11 +9,9 @@ Spree::ProductsController.class_eval do
 
   respond_to :html, :json, :js
   def index
-    params[:ispublic] = true
-    params[:iscustom] = params[:iscustom] == nil ? "false" : params[:iscustom]
-    logger.debug "****** Prototype is #{params}"
     @searcher = Spree::Config.searcher_class.new(params)
     @products = @searcher.retrieve_products
+    @custom_products = (params[:keywords] != nil) ? find_custom_products : nil
 
     respond_with(@products)
   end

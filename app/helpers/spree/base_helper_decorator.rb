@@ -107,6 +107,7 @@ Spree::BaseHelper.class_eval do
     else
       image = product.image
       options.reverse_merge! :alt => image.alt.blank? ? product.name : image.alt
+      options.reverse_merge! :size => "100x100"
       image_tag image.attachment.url(:small), options
     end
   end
@@ -117,6 +118,7 @@ Spree::BaseHelper.class_eval do
     else
       image = product.image
       options.reverse_merge! :alt => image.alt.blank? ? product.name : image.alt
+      options.reverse_merge! :size => "600x600"
       image_tag product.images.first.attachment.url(:large), options
     end
   end
@@ -133,7 +135,9 @@ Spree::BaseHelper.class_eval do
 
   def mini_tea_tin_image (custom_product, options = {})
     if !custom_product.has_image?
-      image_tag "/assets/noimage/no-tin-image.png", :size => "94x71", :alt => custom_product.name
+      options.reverse_merge! :alt => custom_product.name
+      options.reverse_merge! :size => "94x71"
+      image_tag "/assets/noimage/no-tin-image.png", options
     else
       image = custom_product.image
       options.reverse_merge! :alt => image.alt.blank? ? custom_product.name : image.alt
@@ -182,11 +186,11 @@ Spree::BaseHelper.class_eval do
     end
   end
 
-  def get_star_rating(name, value)
+  def get_star_rating(name, value, width = "150px", height = "22px")
     return "" if value == 0
     content_tag :tr do
       concat(content_tag :td, name+":", :style =>"width:20%;").
-      concat(content_tag :td,(image_tag '/assets/store/star_'+value.to_s+'.png',width:"150px", height:"22px"))
+      concat(content_tag :td,(image_tag '/assets/store/star_'+value.to_s+'.png',width: width, height: height))
     end  
   end
   

@@ -1,12 +1,41 @@
 class Spree::CustomProduct < ActiveRecord::Base
   has_one :image, as: :viewable, dependent: :destroy, class_name: "Spree::Image"
+  has_many :line_item
+  
+  validate :has_flavors?, if: :require_flavors
+  validates :name, presence: true, if: :require_label_info
+  validates :description, presence: true, if: :require_label_info
+  validate :validate_has_image, if: :require_label_info
+  
   make_permalink order: :name
+   
+  def require_flavors
+    !step.blank?
+  end
+  
+  def require_label_info
+    !step.blank? and step != 'pick_flavors'
+  end
+  
+  def has_flavors?
+    if (flavor_1_name.blank?)
+      errors.add(:base, Spree.t(:missing_flavors)) and return false
+    end
+  end
+    
   def to_param
     permalink.present? ? permalink : (permalink_was || (name == nil ? nil : name.to_s.to_url))
   end
+  
+  def validate_has_image
+    if !has_image?
+      errors.add(:base, Spree.t(:missing_image)) and return false
+    end
+  end
 
   def has_image?
-    image != nil && image.id != nil
+    puts "******** image == nil: " + (image == nil ? "nil" : "not nil") + " image.id: " + (image.blank? ? "nil" : image.id.to_s)
+    image != nil and image.id != nil
   end
 
   def is_final?
@@ -14,6 +43,7 @@ class Spree::CustomProduct < ActiveRecord::Base
   end
 
   def blend
+    return "" if flavor_1_name == nil;
     blend = flavor_1_name + " " + flavor_1_percentage.to_s + "%"
     blend += (flavor_2_name.blank? ? "" : " / " + flavor_2_name + " " + flavor_2_percentage.to_s + "%")
     blend += (flavor_3_name.blank? ? "" : " / " + flavor_3_name + " " + flavor_3_percentage.to_s + "%")
