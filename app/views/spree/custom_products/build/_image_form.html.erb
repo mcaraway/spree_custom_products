@@ -31,7 +31,7 @@
         <span class="btn btn-success fileinput-button">
           <i class="icon-plus icon-white"></i>
           <span>Add files...</span>
-          <%= f.fields_for :image do |i| %>
+          <%= f.fields_for :label_image do |i| %>
           <%= i.file_field :attachment %>
           <% end %>
         </span>

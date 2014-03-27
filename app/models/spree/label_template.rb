@@ -96,10 +96,10 @@ class Spree::LabelTemplate < ActiveRecord::Base
  
   # detect if our label_image file has changed
   def label_image_changed?
-    logger.debug("******** self.label_image_file_size_changed? = " + (self.label_image_file_size_changed?).to_s)
+    logger.debug("******** self.label_image_size_changed? = " + (self.label_image_size_changed?).to_s)
     logger.debug("******** self.label_image_file_name_changed? = " + (self.label_image_file_name_changed?).to_s)
     logger.debug("******** self.label_image_content_type_changed? = " + (self.label_image_content_type_changed?).to_s)
-    self.label_image_file_size_changed? || 
+    self.label_image_size_changed? || 
     self.label_image_file_name_changed? ||
     self.label_image_content_type_changed?
   end   

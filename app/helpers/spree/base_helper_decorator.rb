@@ -32,9 +32,9 @@ Spree::BaseHelper.class_eval do
       options.reverse_merge! :size => "600x600"
       image_tag "noimage/no-tin-image.png", options
     else
-      image = product.image
-      options.reverse_merge! :alt => image.alt.blank? ? product.name : image.alt
-      image_tag product.image.attachment.url(:large), options
+      image = product.label_image
+      options.reverse_merge! :alt => custom_product.name
+      image_tag image.url(:large), options
     end
   end
 
@@ -94,10 +94,10 @@ Spree::BaseHelper.class_eval do
     if !product.has_image?
       image_tag "noimage/no-tin-image.png", :size => "48x48", :alt => product.name
     else
-      image = product.image
-      options.reverse_merge! :alt => image.alt.blank? ? product.name : image.alt
+      image = product.label_image
+      options.reverse_merge! :alt => custom_product.name
       options.reverse_merge! :size => "48x48"
-      image_tag image.first.attachment.url(:mini), options
+      image_tag image.url(:mini), options
     end
   end
 
@@ -105,10 +105,10 @@ Spree::BaseHelper.class_eval do
     if !product.has_image?
       image_tag "noimage/no-tin-image.png", :size => "100x100", :alt => product.name
     else
-      image = product.image
-      options.reverse_merge! :alt => image.alt.blank? ? product.name : image.alt
+      image = product.label_image
+      options.reverse_merge! :alt => product.name
       options.reverse_merge! :size => "100x100"
-      image_tag image.attachment.url(:small), options
+      image_tag image.url(:small), options
     end
   end
 
@@ -116,10 +116,10 @@ Spree::BaseHelper.class_eval do
     if !product.has_image?
       image_tag "noimage/no-tin-image.png", :size => "600x600", :alt => product.name
     else
-      image = product.image
-      options.reverse_merge! :alt => image.alt.blank? ? product.name : image.alt
+      image = product.label_image
+      options.reverse_merge! :alt => product.name
       options.reverse_merge! :size => "600x600"
-      image_tag product.images.first.attachment.url(:large), options
+      image_tag image.url(:large), options
     end
   end
 
@@ -139,10 +139,10 @@ Spree::BaseHelper.class_eval do
       options.reverse_merge! :size => "94x71"
       image_tag "/assets/noimage/no-tin-image.png", options
     else
-      image = custom_product.image
-      options.reverse_merge! :alt => image.alt.blank? ? custom_product.name : image.alt
+      image = custom_product.label_image
+      options.reverse_merge! :alt => custom_product.name
       options.reverse_merge! :size => "94x71"
-      image_tag image.attachment.url(:original), options
+      image_tag image.url(:original), options
     end
   end
 
@@ -150,7 +150,7 @@ Spree::BaseHelper.class_eval do
     if custom_product.image == nil
       image_tag "/assets/CustomTeaLabel.png", :alt => custom_product.name
     else
-      image_tag custom_product.image.attachment.url(:original), :alt => custom_product.name
+      image_tag custom_product.label_image.attachment.url(:original), :alt => custom_product.name
     end
   end
 
@@ -160,10 +160,10 @@ Spree::BaseHelper.class_eval do
       options.reverse_merge! :size => "225x300"
       image_tag "/assets/CustomTeaLabel.png", options
     else
-      image = custom_product.image
-      options.reverse_merge! :alt => image.alt.blank? ? custom_product.name : image.alt
+      image = custom_product.label_image
+      options.reverse_merge! :alt => custom_product.name
       options.reverse_merge! :size => "225x300"
-      image_tag image.attachment.url(:original), options
+      image_tag image.url(:original), options
     end
   end
     

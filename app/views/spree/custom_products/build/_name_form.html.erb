@@ -27,9 +27,7 @@
 		</div>
 		<!-- The fileinput-button span is used to style the file input field as button -->
 		<div class="btn btn-success" id="fakeUpload"> <i class="icon-plus icon-white"></i> <span>Add image...</span> </div>
-		<%= f.fields_for :image do |i| %>
-		<%= i.file_field :attachment, :style=>"visibility: hidden; width: 5px;" %>
-		<% end %>
+		<%= f.file_field :label_image, :style=>"visibility: hidden; width: 5px;" %>
 	</div>
 	<div class = "span9">
 		<div class="span4"><%= render :partial => "tea_label" %></div>
@@ -40,6 +38,6 @@
 <script type="text/javascript">
 	$('#fakeUpload').click(function(e) {
 		e.preventDefault();
-		$('#custom_product_image_attachment').trigger('click');
+		$('#custom_product_label_image').trigger('click');
 	}); 
 </script>

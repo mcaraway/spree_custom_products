@@ -34,20 +34,10 @@ class Spree::CustomProductsController < Spree::StoreController
   private
 
   def verify_login?
-    if try_spree_current_user == nil
-      @user = Spree::User.create_guest_user
-      if @user.save
-        sign_in(:spree_user, @user)
-        session[:spree_user_signup] = true
-        associate_user
-      else
-        flash[:error] = "Unable to create guest account."
-        redirect_to :back
-      end
-    end
+    return if try_spree_current_user != nil
+    session['spree_user_return_to'] = request.original_url
+    redirect_to spree_login_path
   end
-
-  private
 
   def load_product
     @custom_product = Spree::CustomProduct.find_by_permalink!(params[:id])

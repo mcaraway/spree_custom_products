@@ -11,14 +11,19 @@ class Spree::ReprocessImagesJob < Struct.new(:product_id)
         end
         create_sub_job(product)
       end
+      
+      @custom_products = Spree::CustomProduct.all
+      
+      @custom_products.each do |product|
+        if !product.deleted_at.nil?
+        next
+        end
+        Delayed::Job.enqueue Spree::ImageJob.new(product.id)
+      end
     end
   end
 
   def create_sub_job (product)
-    if product.is_custom? and !product.images.empty?
-      Delayed::Job.enqueue Spree::ImageJob.new(product.images[0].id)
-    else
-      Delayed::Job.enqueue Spree::ReprocessProductImageJob.new(product.id)
-    end
+    Delayed::Job.enqueue Spree::ReprocessProductImageJob.new(product.id)
   end
 end

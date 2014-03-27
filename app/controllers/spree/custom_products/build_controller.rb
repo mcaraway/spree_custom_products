@@ -12,18 +12,11 @@ class Spree::CustomProducts::BuildController < Spree::StoreController
     when :pick_flavors
       load_blendables
     when :add_name
-      custom_product_params = params[:custom_product]
-      if custom_product_params[:image] != nil
-        @image = !@custom_product.has_image? ? @custom_product.build_image : Spree::Image.find(@custom_product.image.id)
-        @image.assign_attributes(custom_product_params.require(:image).permit!)
-        @image.save!
-        params[:custom_product].delete :image
-      end
       params[:custom_product][:final] = true
     end
     @custom_product.update_attributes(params.require(:custom_product).permit!)
 
-    if @custom_product.permalink.to_i > 0 && step == :finalize
+    if @custom_product.permalink.to_i > 0 && step == :add_name
       @custom_product.save_permalink(@custom_product.name.to_s.to_url)
       process_resource!(@custom_product)
       redirect_to_finish_wizard
