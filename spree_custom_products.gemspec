@@ -26,6 +26,4 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec-rails',  '~> 2.14.0'
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'database_cleaner', '0.7.1'
-  
-  s.add_dependency 'compass-rails'
 end
